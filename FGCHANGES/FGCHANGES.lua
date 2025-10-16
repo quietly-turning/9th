@@ -308,6 +308,18 @@ for i,v in ipairs(subtitle_choices) do
          Text=v.label,
          InitCommand=function(self)
             self:diffuse(0,0,0,1):zoom(1.5)
+            if (v.subLabel ~= nil) then
+               self:y(-7)
+            end
+         end,
+         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
+         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
+      },
+      LoadFont("Common normal")..{
+         Text=v.subLabel,
+         Condition=v.subLabel ~= nil,
+         InitCommand=function(self)
+            self:diffuse(0,0,0,1):zoom(0.9):y(15)
          end,
          GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
          LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,

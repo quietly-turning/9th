@@ -41,8 +41,9 @@ local subtitle_choices = {
       label="English"
    },
    {
-      file="es",
-      label="Español"
+      file="es-MX",
+      label="Español",
+      subLabel="(Latin America)"
    },
    {
       file="fr",

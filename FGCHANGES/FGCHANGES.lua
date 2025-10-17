@@ -196,11 +196,11 @@ end
 
 af.OnCommand=function(self)
    SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
+   self:queuecommand("StartUpdate")
 end
 
 af.HideUICommand=function(self)
    helpers.HideUI()
-   self:queuecommand("StartUpdate")
 end
 
 af.StartUpdateCommand=function(self)
@@ -210,7 +210,7 @@ end
 
 af.PlayCommand=function(self)
    time_at_start = GetTimeSinceStart()
-   -- audio_ref:play()
+   audio_ref:play()
 end
 
 -- ------------------------------------------------------

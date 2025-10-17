@@ -8,55 +8,13 @@ local helpers = {
 }
 
 -- ------------------------------------------------------
--- based on global split() from _fallback/Scripts/00 init.lua
--- hackishly modified to include a numeric "stop" value
--- as in: stop splitting the provided `text` if you've already split `stop` number of times
-
-helpers.split = function(delimiter, text, stop)
-   local list = {}
-   local pos = 1
-
-  if type(stop)~="number" then stop=9999 end
-
-   while 1 do
-      local first,last = string.find(text, delimiter, pos)
-      if first then
-         table.insert(list, string.sub(text, pos, first-1))
-         pos = last+1
-         -- if we've reach our limit of splits
-         -- insert the remaining string until its end and break
-         if #list >= stop-1 then
-            table.insert(list, string.sub(text, pos))
-            break
-         end
-      else
-         table.insert(list, string.sub(text, pos))
-         break
-      end
-   end
-   return list
-end
-
--- ------------------------------------------------------
--- StrToSecs converts a stringified timestamp formatted like "00:02:15.10"
--- and returns it as a numeric value of seconds
-
-helpers.StrToSecs = function(s)
-   local hour, min, sec = s:match("(%d+):(%d%d):(%d%d%.%d+)")
-   hour = hour or 0
-   min  = min  or 0
-   sec  = sec  or 0
-   return ((hour*60*60)+(min*60)+(sec))
-end
-
--- ------------------------------------------------------
 -- function for detecting edit mode
 -- returns true or false
 
 helpers.IsEditMode = function()
    local screen = SCREENMAN:GetTopScreen()
     if not screen then
-      lua.ReportScriptError("Helpers.IsEditMode() check failed to run because there is no Screen yet.")
+      lua.ReportScriptError("helpers.IsEditMode() check failed to run because there is no Screen yet.\nYou should call helpers.IsEditMode() from an OnCommand, or queue it from InitCommand, so that it will be useful.")
       return nil
    end
 
@@ -64,33 +22,13 @@ helpers.IsEditMode = function()
 end
 
 -- ------------------------------------------------------
--- hides all children layers of the current screen except for "SongForeground"
+-- hides all children layers of ScreenGameplay except for "SongForeground", "PlayerP1", and "PlayerP2"
 -- intended to be used with ScreenGameplay
 
 helpers.HideUI = function()
    local screen = SCREENMAN:GetTopScreen()
    if not screen then
-      lua.ReportScriptError("Helpers.HideUI() failed to run because there is no Screen yet.")
-      return nil
-   end
-
-   -- don't hide the theme's UI in EditMode
-   if helpers.IsEditMode() then
-      return
-   end
-
-   for name,layer in pairs(screen:GetChildren()) do
-      if name ~= "SongForeground" then
-         layer:visible(false)
-      end
-   end
-end
-
-
-helpers.HideUI = function()
-   local screen = SCREENMAN:GetTopScreen()
-   if not screen then
-      lua.ReportScriptError("Helpers.HideUI() failed to run because there is no Screen yet.")
+      lua.ReportScriptError("helpers.HideUI() failed to run because there is no Screen yet.\nYou should call helpers.IsEditMode() from an OnCommand, or queue it from InitCommand, so that it will be useful.")
       return nil
    end
 
@@ -105,6 +43,7 @@ helpers.HideUI = function()
       end
    end
 end
+
 -- ------------------------------------------------------
 -- Takes a string and generates a case insensitive Lua string pattern.
 -- e.g. "ini" returns "[Ii][Nn][Ii]"

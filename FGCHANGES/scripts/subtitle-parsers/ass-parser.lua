@@ -1,8 +1,50 @@
 -- reference: http://www.tcax.org/docs/ass-specs.htm
 -- reference: https://www.matroska.org/technical/subtitles.html#ssaass-subtitles
 
-local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
-local helpers   = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
+-- ------------------------------------------------------
+-- StrToSecs converts a stringified timestamp formatted like "00:02:15.10"
+-- and returns it as a numeric value of seconds
+
+local function StrToSecs(s)
+  local hour, min, sec = s:match("(%d+):(%d%d):(%d%d%.%d+)")
+  hour = hour or 0
+  min  = min  or 0
+  sec  = sec  or 0
+  return ((hour*60*60)+(min*60)+(sec))
+end
+
+
+-- ------------------------------------------------------
+-- based on global split() from _fallback/Scripts/00 init.lua
+-- hackishly modified to include a numeric "stop" value
+-- as in: stop splitting the provided `text` if you've already split `stop` number of times
+
+local function split(delimiter, text, stop)
+  local list = {}
+  local pos = 1
+
+  if type(stop)~="number" then stop=9999 end
+
+  while 1 do
+    local first,last = string.find(text, delimiter, pos)
+    if first then
+      table.insert(list, string.sub(text, pos, first-1))
+      pos = last+1
+      -- if we've reach our limit of splits
+      -- insert the remaining string until its end and break
+      if #list >= stop-1 then
+        table.insert(list, string.sub(text, pos))
+        break
+      end
+    else
+      table.insert(list, string.sub(text, pos))
+      break
+    end
+  end
+  return list
+end
+
+-- ------------------------------------------------------
 
 local RageFile =
 {
@@ -11,6 +53,7 @@ local RageFile =
   STREAMED   = 4,
   SLOW_FLUSH = 8,
 }
+-- ------------------------------------------------------
 
 local ParseFile = function( file_path )
   local file = RageFileUtil.CreateRageFile()
@@ -53,7 +96,7 @@ local ParseFile = function( file_path )
             -- remove the "Format:" text
             line, _ = line:gsub("^%s*Format:", "")
             -- and split the remaining string on commas into an array
-            current.Format = helpers.split(",", line)
+            current.Format = split(",", line)
           else
             lua.ReportScriptError( ("'Format:' line not found under '[%s]' section in %s"):format(sec, file_path) )
           end
@@ -73,7 +116,7 @@ local ParseFile = function( file_path )
           line, _ = line:gsub("{.-}","")
 
 
-          local chunks = helpers.split(",", line, #current.Format)
+          local chunks = split(",", line, #current.Format)
           local t = {}
 
           for i,chunk in ipairs(chunks) do
@@ -82,7 +125,7 @@ local ParseFile = function( file_path )
 
             -- convert stringified timestamp to number of seconds
             if k=="Start" or k=="End" then
-              t[k] = helpers.StrToSecs(chunk)
+              t[k] = StrToSecs(chunk)
 
             -- cast stringified layer value to number
             elseif k=="Layer" then

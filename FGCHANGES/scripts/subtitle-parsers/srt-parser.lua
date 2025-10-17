@@ -1,7 +1,17 @@
 -- reference: https://www.matroska.org/technical/subtitles.html#srt-subtitles
 
-local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
-local helpers   = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
+-- ------------------------------------------------------
+-- StrToSecs converts a stringified timestamp formatted like "00:02:15.10"
+-- and returns it as a numeric value of seconds
+
+local function StrToSecs(s)
+   local hour, min, sec = s:match("(%d+):(%d%d):(%d%d%.%d+)")
+   hour = hour or 0
+   min  = min  or 0
+   sec  = sec  or 0
+   return ((hour*60*60)+(min*60)+(sec))
+end
+-- ------------------------------------------------------
 
 local RageFile =
 {
@@ -10,6 +20,8 @@ local RageFile =
    STREAMED   = 4,
    SLOW_FLUSH = 8,
 }
+-- ------------------------------------------------------
+
 
 local ParseFile = function( file_path )
    local file = RageFileUtil.CreateRageFile()
@@ -67,7 +79,7 @@ local ParseFile = function( file_path )
                   line_num = line_num+1
                end
 
-               table.insert(events, {Start=helpers.StrToSecs(start), End=helpers.StrToSecs(finish), Text=text})
+               table.insert(events, {Start=StrToSecs(start), End=StrToSecs(finish), Text=text})
 
             else
                lua.ReportScriptError( ("Error parsing %s\n   line %d: Couldn't parse start and finish time."):format(file_path, line_num) )

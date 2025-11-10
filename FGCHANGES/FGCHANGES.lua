@@ -35,33 +35,57 @@ local subtitle_ref, audio_ref, countdown_ref, cursor_sfx_ref, cursor_triangle_re
 local choices_refs = {}
 
 -- ------------------------------------------------------
+
+-- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
+local en_subtitle_actor = LoadFont("Common normal")
+local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
+
+-- ------------------------------------------------------
 local subtitle_choices = {
    {
       file="en",
-      label="English"
+      label="English",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
    {
       file="es-MX",
       label="Español",
-      subLabel="(Latin America)"
+      subLabel="(Latin America)",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
    {
       file="fr",
-      label="Français"
+      label="Français",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
    {
       file="jp",
-      label="日本語"
+      label="日本語",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
    {
       file="it",
-      label="Italiano"
+      label="Italiano",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
    {
       file="ru",
-      label="Русский"
+      label="Русский",
+      subtitleActor=en_subtitle_actor,
+      characterSet="en",
    },
-
+   {
+      file="zh-HANS",
+      label="简体中文",
+      subtitleActor=sc_subtitle_actor,
+      characterSet="sc",
+      Setup=function(self) self:halign(0):addx(-200) end,
+   },
 }
 
 local subtitle_choice = 1
@@ -103,12 +127,12 @@ local UpdateTimer = function(af)
    else
       LoadSubtitleFile( subtitle_choices[subtitle_choice].file..".my-heart-almost-stood-still.srt" )
       countdown_ref:visible(false)
-      for i=1,#subtitle_choices do
-         choices_refs[i]:visible(false)
-      end
+
+      -- hide the ActorFrame containing all subtitle choices
+      choice_af_ref:queuecommand("Hide")
+
       af:playcommand("Play")
       af:playcommand("HideQuad")
-      choice_af_ref:visible(false)
       timer_done = true
    end
 end
@@ -121,6 +145,7 @@ local set = false  -- when false, the subtitle_actor has an empty string as its 
 -- custom Update function is used to keep track of which subtitle to show
 local UpdateSubtitles = function()
    if not subtitle_data then return false end
+   if not subtitle_ref  then return false end
 
    -- no more subtitles to show
    if not (subtitle_data[subtitle_index] and subtitle_data[subtitle_index].Start and subtitle_data[subtitle_index].End) then
@@ -131,11 +156,11 @@ local UpdateSubtitles = function()
    local time = GetTimeSinceStart() - time_at_start
 
    if not set and time >= subtitle_data[subtitle_index].Start then
-      subtitle_ref:settext(subtitle_data[subtitle_index].Text)
+      subtitle_ref:playcommand("SetText", {text=subtitle_data[subtitle_index].Text})
       set = true
 
    elseif set and time >= subtitle_data[subtitle_index].End then
-      subtitle_ref:settext("")
+      subtitle_ref:playcommand("SetText", {text=""})
       set = false
       subtitle_index = subtitle_index + 1
    end
@@ -182,9 +207,6 @@ af[#af+1] = Def.Quad{
 local audio_actor = Def.Sound{ File=audio_path }
 audio_actor.InitCommand=function(self) audio_ref = self end
 
--- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
-local subtitle_actor = LoadFont("Common normal")
-
 local countdown_timer = LoadFont("Common bold")
 countdown_timer.InitCommand=function(self)
    countdown_ref = self
@@ -215,33 +237,76 @@ end
 
 -- ------------------------------------------------------
 
-subtitle_actor.InitCommand=function(self)
-   subtitle_ref = self
-   self:Center():wrapwidthpixels(max_subt_width):zoom(font_zoom)
-   self:vertalign(top):y(170)
-   self:diffuse(subtitle_color):strokecolor(subtitle_stroke_color)
+af[#af+1] = audio_actor
+af[#af+1] = countdown_timer
+
+-- ------------------------------------------------------
+-- XXX: clunky Lua to create one unique BitmapText actor per-glyph-set needed. :(
+--      it doesn't seem possible to create a single "import" font from within a stepchart
+--      that combines all custom-fonts-local-to-this-stepchart.  (if that were possible,
+--      we could have a single BitmapText actor for subtitles that has all possible characters needed.)
+--      but, it looks like specifying "import=" in a font's ini file is hardcoded to look
+--      in the current theme's Fonts folder, which doesn't help us from the context of this stepchart.
+--      https://github.com/itgmania/itgmania/blob/159391b8a244cffdde9366b97e6a2d03f9cfb6b8/src/Font.cpp#L831
+
+local subtitle_actors = {
+   {characterSet="en", actor=en_subtitle_actor},
+   {characterSet="sc", actor=sc_subtitle_actor},
+   --{characterSet="jp", actor=jp_subtitle_actor},
+   --{characterSet="ko", actor=ko_subtitle_actor},
+}
+
+for subtitle_actor in ivalues(subtitle_actors) do
+
+   subtitle_actor.actor.PlayCommand=function(self)
+      -- if this is the BitmapText actor we want to use for subtitles, set it up!
+      if subtitle_choices[subtitle_choice].characterSet == subtitle_actor.characterSet then
+         subtitle_ref = self
+
+         self:Center()
+         self:zoom(font_zoom)
+         self:wrapwidthpixels(max_subt_width)
+         self:vertalign(top):y(170)
+         self:diffuse(subtitle_color)
+         self:strokecolor(subtitle_stroke_color)
+
+         if subtitle_choices[subtitle_choice].Setup then
+            subtitle_choices[subtitle_choice].Setup(self)
+         end
+
+      -- otherwise (e.g. the player chooses Simplified Chinese, and this BitmapText actor has latin characters loaded) hibernate it!
+      else
+         self:hibernate(math.huge)
+      end
+   end
+
+   subtitle_actor.actor.SetTextCommand=function(self, params)
+      self:settext(params.text)
+   end
+
+   af[#af+1] = subtitle_actor.actor
 end
 
 -- ------------------------------------------------------
-
-af[#af+1] = audio_actor
-af[#af+1] = subtitle_actor
-af[#af+1] = countdown_timer
-
+-- subtitle choices
+-- TODO: move this to its own AF
 
 local choice_af = Def.ActorFrame({})
 choice_af.InitCommand=function(self)
    choice_af_ref = self
 end
-choice_af.HideCommand=function(self) end
+choice_af.HideCommand=function(self)
+   self:hibernate(math.huge)
+end
 
 choice_af[#choice_af+1] = LoadActor("./sfx/cursor.ogg")..{
-   InitCommand=function(self) cursor_sfx_ref = self end
+   InitCommand=function(self) cursor_sfx_ref = self end,
+   HideCommand=function(self) self:hibernate(math.huge) end
 }
 
 choice_af[#choice_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
    InitCommand=function(self) self:Center():zoom(0.333) end,
-   HideCommand=function(self) self:visible(false) end
+   HideCommand=function(self) self:hibernate(math.huge) end
 }
 
 
@@ -305,7 +370,26 @@ for i,v in ipairs(subtitle_choices) do
             self:diffuse(color("94a3b8"))
          end
       },
+
+      -- TODO: don't rely on SL's Common normal
+      --       replace with custom bundled font
       LoadFont("Common normal")..{
+         Condition=v.characterSet=="en",
+         Text=v.label,
+         InitCommand=function(self)
+            self:diffuse(0,0,0,1):zoom(1.5)
+            if (v.subLabel ~= nil) then
+               self:y(-7)
+            end
+         end,
+         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
+         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
+      },
+
+      -- simplified chinese
+      Def.BitmapText{
+         File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini",
+         Condition=v.characterSet=="sc",
          Text=v.label,
          InitCommand=function(self)
             self:diffuse(0,0,0,1):zoom(1.5)

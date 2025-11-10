@@ -19,7 +19,7 @@ const text = `亲爱的朋友们，
 令我惊奇的是，
 我不仅能感受到震动，
 还有激昂的节奏，
-⾳乐的悸动，和⾳乐的冲动.
+⾳乐的悸动，和⾳乐的冲动。
 交织交织的振动
 从不同的乐器让我着迷。
 我实际上可以分辨出短号，
@@ -73,9 +73,11 @@ const text = `亲爱的朋友们，
 带来的所有欢乐。
 致以最诚挚的问候和最美好的祝愿
 我诚挚地敬你，
-海伦 凯勒`;
+海伦凯勒`
 
-const set = new Set();
+
+const COLS = 25
+const set = new Set()
 
 for (let i=0; i < text.length; i++){
   if (text.charAt(i) != '\n'){
@@ -83,10 +85,20 @@ for (let i=0; i < text.length; i++){
   }
 }
 
-let s = '';
+console.log(set.size)
+let s = ''
+
 for (const char of set){
-  s += char;
+  s += char
+  if (s.length===COLS){
+    console.log(s)
+    s = ''
+  }
 }
 
-console.log(set.size)
-console.log(s);
+console.log(s)
+
+// // unicode points
+// for (let i=0; i<set.size; i++){
+//   console.log(`map U+${s.codePointAt(i).toString(16)}=${i}`)
+// }

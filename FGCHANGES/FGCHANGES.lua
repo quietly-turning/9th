@@ -39,6 +39,8 @@ local choices_refs = {}
 -- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
 local en_subtitle_actor = LoadFont("Common normal")
 local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
+local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
+local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
 
 -- ------------------------------------------------------
 local subtitle_choices = {
@@ -64,8 +66,9 @@ local subtitle_choices = {
    {
       file="jp",
       label="日本語",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
+      subtitleActor=jp_subtitle_actor,
+      characterSet="jp",
+      Setup=function(self) self:halign(0):addx(-200) end,
    },
    {
       file="it",
@@ -84,6 +87,13 @@ local subtitle_choices = {
       label="简体中文",
       subtitleActor=sc_subtitle_actor,
       characterSet="sc",
+      Setup=function(self) self:halign(0):addx(-200) end,
+   },
+   {
+      file="zh-HANT",
+      label="繁體中文",
+      subtitleActor=tc_subtitle_actor,
+      characterSet="tc",
       Setup=function(self) self:halign(0):addx(-200) end,
    },
 }
@@ -252,7 +262,8 @@ af[#af+1] = countdown_timer
 local subtitle_actors = {
    {characterSet="en", actor=en_subtitle_actor},
    {characterSet="sc", actor=sc_subtitle_actor},
-   --{characterSet="jp", actor=jp_subtitle_actor},
+   {characterSet="tc", actor=tc_subtitle_actor},
+   {characterSet="jp", actor=jp_subtitle_actor},
    --{characterSet="ko", actor=ko_subtitle_actor},
 }
 
@@ -400,6 +411,38 @@ for i,v in ipairs(subtitle_choices) do
          GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
          LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
       },
+
+      -- traditional chinese
+      Def.BitmapText{
+         File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini",
+         Condition=v.characterSet=="tc",
+         Text=v.label,
+         InitCommand=function(self)
+            self:diffuse(0,0,0,1):zoom(1.5)
+            if (v.subLabel ~= nil) then
+               self:y(-7)
+            end
+         end,
+         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
+         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
+      },
+
+      -- japanese
+      Def.BitmapText{
+         File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini",
+         Condition=v.characterSet=="jp",
+         Text=v.label,
+         InitCommand=function(self)
+            self:diffuse(0,0,0,1):zoom(1.5)
+            if (v.subLabel ~= nil) then
+               self:y(-7)
+            end
+         end,
+         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
+         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
+      },
+
+
       LoadFont("Common normal")..{
          Text=v.subLabel,
          Condition=v.subLabel ~= nil,

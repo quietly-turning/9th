@@ -30,8 +30,7 @@ end
 -- ------------------------------------------------------
 
 local time_at_start
-local subtitle_ref, audio_ref, countdown_ref, cursor_sfx_ref, cursor_triangle_ref, choices_af_ref
-local choices_refs = {}
+local subtitle_ref, audio_ref, countdown_ref
 
 -- ------------------------------------------------------
 
@@ -50,32 +49,9 @@ local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
-
-local subtitle_choices = LoadActor("./subtitle_choices.lua")
 local subtitle_choice = 1
-
-local function InputHandler( event )
-   if event.type ~= "InputEventType_FirstPress" then return end
-
-   if event.GameButton == "MenuLeft" then
-      choices_refs[subtitle_choice]:playcommand("LoseFocus")
-      subtitle_choice = subtitle_choice - 1
-      if (subtitle_choice==0) then subtitle_choice=#subtitle_choices end
-      choices_refs[subtitle_choice]:playcommand("GainFocus")
-      cursor_sfx_ref:play()
-      cursor_triangle_ref:playcommand("Move")
-
-   elseif event.GameButton == "MenuRight" then
-      choices_refs[subtitle_choice]:playcommand("LoseFocus")
-      subtitle_choice = subtitle_choice + 1
-      if (subtitle_choice>#subtitle_choices) then subtitle_choice=1 end
-      choices_refs[subtitle_choice]:playcommand("GainFocus")
-      cursor_sfx_ref:play()
-      cursor_triangle_ref:playcommand("Move")
-
-   end
-
-end
+local subtitle_choices = LoadActor("./subtitle_choices.lua")
+local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices}))
 
 -- ------------------------------------------------------
 local timer_done = false
@@ -90,9 +66,11 @@ local UpdateTimer = function(af)
    if (timer_text > 0) then
       countdown_ref:settext( timer_text )
 
+
    -- countdown timer has ended
    -- load subtitle and audio files based on player choices
    else
+      subtitle_choice = GetSubtitleChoice()
       LoadSubtitleFile( subtitle_choices[subtitle_choice].file..".my-heart-almost-stood-still.srt" )
       audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
       audio_ref:playcommand("LoadFile")
@@ -100,7 +78,7 @@ local UpdateTimer = function(af)
       countdown_ref:visible(false)
 
       -- hide the ActorFrame containing all subtitle choices
-      choices_af_ref:queuecommand("Hide")
+      af:queuecommand("HideSubtitleChoices")
 
       af:playcommand("Play")
       af:playcommand("HideQuad")
@@ -290,142 +268,6 @@ for subtitle_actor in ivalues(subtitle_actors) do
 end
 
 -- ------------------------------------------------------
--- subtitle choices
--- TODO: move this to its own file
-
-local choices_af = Def.ActorFrame({})
-choices_af.InitCommand=function(self)
-   choices_af_ref = self
-end
-choices_af.HideCommand=function(self)
-   self:hibernate(math.huge)
-end
-
-choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
-   InitCommand=function(self) cursor_sfx_ref = self end,
-   HideCommand=function(self) self:hibernate(math.huge) end
-}
-
-choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
-   InitCommand=function(self) self:Center():zoom(0.333) end,
-   HideCommand=function(self) self:hibernate(math.huge) end
-}
-
-
-
-choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
-   InitCommand=function(self)
-      cursor_triangle_ref = self
-      self:zoom(0.5):queuecommand("Move")
-   end,
-   MoveCommand=function(self)
-      self:x(choices_refs[subtitle_choice]:GetX())
-      self:y(choices_refs[subtitle_choice]:GetY()-47)
-      self:queuecommand("Bump")
-   end,
-   BumpCommand=function(self)
-      self:finishtweening()
-      self:smooth(0.1):y( self:GetY()-3 )
-      self:smooth(0.1):y( self:GetY()+3)
-   end,
-}
-
-for i,v in ipairs(subtitle_choices) do
-   local choice_af = Def.ActorFrame({
-      name=v.file.."-choice",
-
-      InitCommand=function(self)
-         choices_refs[i] = self
-         self:x(_screen.cx + (((i-1)%3)-1)*200)
-         self:y( (math.floor((i-1)/3)*100) + 170)
-         if (i==1) then self:queuecommand("GainFocus") end
-      end,
-   })
-
-
-   choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
-      Name="choice-stroke",
-      InitCommand=function(self)
-         self:diffuse(1, 1, 1, 1)
-         self:zoomto(176, 76):visible(false)
-         self:glowshift()
-         self:effectcolor1(color("#818cf8"))
-         self:effectcolor2(color("#6366f1"))
-         self:effectperiod(1)
-      end,
-      GainFocusCommand=function(self)
-         self:visible(true)
-      end,
-      LoseFocusCommand=function(self)
-         self:visible(false)
-      end
-   }
-
-   choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
-      Name="choice-bg",
-      InitCommand=function(self)
-         self:diffuse(color("94a3b8"))
-         self:zoom(0.333)
-      end,
-      GainFocusCommand=function(self)
-         self:diffuse(color("#4f46e5"))
-      end,
-      LoseFocusCommand=function(self)
-         self:diffuse(color("94a3b8"))
-      end
-   }
-
-
-   local choice_font_actor
-
-   -- TODO: don't rely on SL's Common normal
-   --       replace with custom bundled font
-   if     v.characterSet == "en" then
-      choice_font_actor = LoadFont("Common normal")
-
-   -- simplified chinese
-   elseif v.characterSet == "sc" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" }
-
-   -- traditional chinese
-   elseif v.characterSet == "tc" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" }
-
-   -- japanese
-   elseif v.characterSet == "jp" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" }
-
-   -- thai
-   elseif v.characterSet == "th" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" }
-
-   end
-
-   choice_font_actor.Text = v.label
-   choice_font_actor.InitCommand=function(self)
-      self:diffuse(0,0,0,1):zoom(1.5)
-      if (v.subLabel ~= nil) then
-         self:y(-7)
-      end
-   end
-   choice_font_actor.GainFocusCommand=function(self) self:diffuse(1,1,1,1) end
-   choice_font_actor.LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end
-
-
-   choice_af[#choice_af+1] = choice_font_actor
-
-   choice_af[#choice_af+1] = LoadFont("Common normal")..{
-      Text=v.subLabel,
-      Condition=v.subLabel ~= nil,
-      InitCommand=function(self)
-         self:diffuse(0,0,0,1):zoom(0.9):y(15)
-      end,
-      GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-      LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-   }
-
-   choices_af[#choices_af+1] = choice_af
-end
 
 af[#af+1] = choices_af
 

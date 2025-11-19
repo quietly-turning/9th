@@ -30,7 +30,7 @@ end
 -- ------------------------------------------------------
 
 local time_at_start
-local subtitle_ref, audio_ref, countdown_ref, cursor_sfx_ref, cursor_triangle_ref, choice_af_ref
+local subtitle_ref, audio_ref, countdown_ref, cursor_sfx_ref, cursor_triangle_ref, choices_af_ref
 local choices_refs = {}
 
 -- ------------------------------------------------------
@@ -100,7 +100,7 @@ local UpdateTimer = function(af)
       countdown_ref:visible(false)
 
       -- hide the ActorFrame containing all subtitle choices
-      choice_af_ref:queuecommand("Hide")
+      choices_af_ref:queuecommand("Hide")
 
       af:playcommand("Play")
       af:playcommand("HideQuad")
@@ -291,29 +291,29 @@ end
 
 -- ------------------------------------------------------
 -- subtitle choices
--- TODO: move this to its own AF
+-- TODO: move this to its own file
 
-local choice_af = Def.ActorFrame({})
-choice_af.InitCommand=function(self)
-   choice_af_ref = self
+local choices_af = Def.ActorFrame({})
+choices_af.InitCommand=function(self)
+   choices_af_ref = self
 end
-choice_af.HideCommand=function(self)
+choices_af.HideCommand=function(self)
    self:hibernate(math.huge)
 end
 
-choice_af[#choice_af+1] = LoadActor("./sfx/cursor.ogg")..{
+choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
    InitCommand=function(self) cursor_sfx_ref = self end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 
-choice_af[#choice_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
+choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
    InitCommand=function(self) self:Center():zoom(0.333) end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 
 
 
-choice_af[#choice_af+1] = LoadActor("./img/cursor-triangle.png")..{
+choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
    InitCommand=function(self)
       cursor_triangle_ref = self
       self:zoom(0.5):queuecommand("Move")
@@ -331,7 +331,7 @@ choice_af[#choice_af+1] = LoadActor("./img/cursor-triangle.png")..{
 }
 
 for i,v in ipairs(subtitle_choices) do
-   choice_af[#choice_af+1] = Def.ActorFrame({
+   local choice_af = Def.ActorFrame({
       name=v.file.."-choice",
 
       InitCommand=function(self)
@@ -340,127 +340,93 @@ for i,v in ipairs(subtitle_choices) do
          self:y( (math.floor((i-1)/3)*100) + 170)
          if (i==1) then self:queuecommand("GainFocus") end
       end,
-
-      LoadActor("./img/choice-bg.png")..{
-         Name="choice-stroke",
-         InitCommand=function(self)
-            self:diffuse(1, 1, 1, 1)
-            self:zoomto(176, 76):visible(false)
-            self:glowshift()
-		      self:effectcolor1(color("#818cf8"))
-		      self:effectcolor2(color("#6366f1"))
-		      self:effectperiod(1)
-         end,
-         GainFocusCommand=function(self)
-            self:visible(true)
-         end,
-         LoseFocusCommand=function(self)
-            self:visible(false)
-         end
-      },
-
-      LoadActor("./img/choice-bg.png")..{
-         Name="choice-bg",
-         InitCommand=function(self)
-            self:diffuse(color("94a3b8"))
-            self:zoom(0.333)
-         end,
-         GainFocusCommand=function(self)
-            self:diffuse(color("#4f46e5"))
-         end,
-         LoseFocusCommand=function(self)
-            self:diffuse(color("94a3b8"))
-         end
-      },
-
-      -- TODO: don't rely on SL's Common normal
-      --       replace with custom bundled font
-      LoadFont("Common normal")..{
-         Condition=v.characterSet=="en",
-         Text=v.label,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(1.5)
-            if (v.subLabel ~= nil) then
-               self:y(-7)
-            end
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      },
-
-      -- simplified chinese
-      Def.BitmapText{
-         File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini",
-         Condition=v.characterSet=="sc",
-         Text=v.label,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(1.5)
-            if (v.subLabel ~= nil) then
-               self:y(-7)
-            end
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      },
-
-      -- traditional chinese
-      Def.BitmapText{
-         File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini",
-         Condition=v.characterSet=="tc",
-         Text=v.label,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(1.5)
-            if (v.subLabel ~= nil) then
-               self:y(-7)
-            end
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      },
-
-      -- japanese
-      Def.BitmapText{
-         File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini",
-         Condition=v.characterSet=="jp",
-         Text=v.label,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(1.5)
-            if (v.subLabel ~= nil) then
-               self:y(-7)
-            end
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      },
-
-      -- thai
-      Def.BitmapText{
-         File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini",
-         Condition=v.characterSet=="th",
-         Text=v.label,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(1.5)
-            if (v.subLabel ~= nil) then
-               self:y(-7)
-            end
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      },
-
-
-      LoadFont("Common normal")..{
-         Text=v.subLabel,
-         Condition=v.subLabel ~= nil,
-         InitCommand=function(self)
-            self:diffuse(0,0,0,1):zoom(0.9):y(15)
-         end,
-         GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
-         LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
-      }
    })
+
+
+   choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
+      Name="choice-stroke",
+      InitCommand=function(self)
+         self:diffuse(1, 1, 1, 1)
+         self:zoomto(176, 76):visible(false)
+         self:glowshift()
+         self:effectcolor1(color("#818cf8"))
+         self:effectcolor2(color("#6366f1"))
+         self:effectperiod(1)
+      end,
+      GainFocusCommand=function(self)
+         self:visible(true)
+      end,
+      LoseFocusCommand=function(self)
+         self:visible(false)
+      end
+   }
+
+   choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
+      Name="choice-bg",
+      InitCommand=function(self)
+         self:diffuse(color("94a3b8"))
+         self:zoom(0.333)
+      end,
+      GainFocusCommand=function(self)
+         self:diffuse(color("#4f46e5"))
+      end,
+      LoseFocusCommand=function(self)
+         self:diffuse(color("94a3b8"))
+      end
+   }
+
+
+   local choice_font_actor
+
+   -- TODO: don't rely on SL's Common normal
+   --       replace with custom bundled font
+   if     v.characterSet == "en" then
+      choice_font_actor = LoadFont("Common normal")
+
+   -- simplified chinese
+   elseif v.characterSet == "sc" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" }
+
+   -- traditional chinese
+   elseif v.characterSet == "tc" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" }
+
+   -- japanese
+   elseif v.characterSet == "jp" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" }
+
+   -- thai
+   elseif v.characterSet == "th" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" }
+
+   end
+
+   choice_font_actor.Text = v.label
+   choice_font_actor.InitCommand=function(self)
+      self:diffuse(0,0,0,1):zoom(1.5)
+      if (v.subLabel ~= nil) then
+         self:y(-7)
+      end
+   end
+   choice_font_actor.GainFocusCommand=function(self) self:diffuse(1,1,1,1) end
+   choice_font_actor.LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end
+
+
+   choice_af[#choice_af+1] = choice_font_actor
+
+   choice_af[#choice_af+1] = LoadFont("Common normal")..{
+      Text=v.subLabel,
+      Condition=v.subLabel ~= nil,
+      InitCommand=function(self)
+         self:diffuse(0,0,0,1):zoom(0.9):y(15)
+      end,
+      GainFocusCommand=function(self) self:diffuse(1,1,1,1) end,
+      LoseFocusCommand=function(self) self:diffuse(0,0,0,1) end,
+   }
+
+   choices_af[#choices_af+1] = choice_af
 end
 
-af[#af+1] = choice_af
+af[#af+1] = choices_af
 
 return af

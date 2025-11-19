@@ -9,7 +9,7 @@ local helpers = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
 local font_zoom             = 1.5
 local subtitle_color        = {1,1,1,1} -- white text by default
 
-local audio_path    = base_path .. "FGCHANGES/media/my-heart-almost-stood-still.ogg"
+local audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
 local subtitle_path
 
 local max_subt_width = (_screen.w-64) / font_zoom
@@ -147,10 +147,17 @@ local UpdateTimer = function(af)
    local time = GetTimeSinceStart() - time_at_start
    local timer_text = math.round(10 - time)
 
+   -- time still remaining on countdown timer; update it
    if (timer_text > 0) then
       countdown_ref:settext( timer_text )
+
+   -- countdown timer has ended
+   -- load subtitle and audio files based on player choices
    else
       LoadSubtitleFile( subtitle_choices[subtitle_choice].file..".my-heart-almost-stood-still.srt" )
+      -- audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
+      audio_ref:playcommand("LoadFile")
+
       countdown_ref:visible(false)
 
       -- hide the ActorFrame containing all subtitle choices
@@ -241,8 +248,9 @@ af[#af+1] = Def.Quad{
 
 -- ------------------------------------------------------
 -- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-ActorSound
-local audio_actor = Def.Sound{ File=audio_path }
+local audio_actor = Def.Sound{}
 audio_actor.InitCommand=function(self) audio_ref = self end
+audio_actor.LoadFileCommand=function(self) self:load(audio_path) end
 
 local countdown_timer = LoadFont("Common bold")
 countdown_timer.InitCommand=function(self)

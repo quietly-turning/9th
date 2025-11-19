@@ -43,13 +43,13 @@ local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
 
 -- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
--- lanauges like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
+-- languages like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
 -- into sprite frames
 local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" })
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
-local subtitle_choice = 1
+local subtitle_choice
 local subtitle_choices = LoadActor("./subtitle_choices.lua")
 local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices}))
 
@@ -70,8 +70,8 @@ local UpdateTimer = function(af)
    -- countdown timer has ended
    -- load subtitle and audio files based on player choices
    else
-      subtitle_choice = GetSubtitleChoice()
-      LoadSubtitleFile( subtitle_choices[subtitle_choice].file..".my-heart-almost-stood-still.srt" )
+      subtitle_choice = subtitle_choices[GetSubtitleChoice()]
+      LoadSubtitleFile( subtitle_choice.file..".my-heart-almost-stood-still.srt" )
       audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
       audio_ref:playcommand("LoadFile")
 
@@ -106,7 +106,7 @@ local UpdateSubtitles = function()
 
    if not set and time >= subtitle_data[subtitle_index].Start then
       local params = {}
-      if subtitle_choices[subtitle_choice].bakedFile then
+      if subtitle_choice.bakedFile then
          params.frame = subtitle_index
       else
          params.text = subtitle_data[subtitle_index].Text
@@ -116,7 +116,7 @@ local UpdateSubtitles = function()
       set = true
 
    elseif set and time >= subtitle_data[subtitle_index].End then
-      if subtitle_choices[subtitle_choice].bakedFile then
+      if subtitle_choice.bakedFile then
          subtitle_ref:visible(false)
       else
          subtitle_ref:playcommand("SetText", {text=""})
@@ -141,6 +141,26 @@ end
 
 local af = Def.ActorFrame{}
 
+af.OnCommand=function(self)
+   SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
+   self:queuecommand("StartUpdate")
+end
+
+af.HideUICommand=function(self)
+   helpers.HideUI()
+end
+
+af.StartUpdateCommand=function(self)
+   time_at_start = GetTimeSinceStart()
+   self:SetUpdateFunction( Update )
+end
+
+af.PlayCommand=function(self)
+   time_at_start = GetTimeSinceStart()
+   audio_ref:play()
+end
+
+-- ------------------------------------------------------
 -- sleep for a Very Long While so that the FGCHANGE stays alive when nothing else is tweening
 af[#af+1] = Def.Actor({ InitCommand=function(self) self:sleep(999999) end })
 
@@ -169,6 +189,12 @@ local audio_actor = Def.Sound{}
 audio_actor.InitCommand=function(self) audio_ref = self end
 audio_actor.LoadFileCommand=function(self) self:load(audio_path) end
 
+af[#af+1] = audio_actor
+
+
+-- ------------------------------------------------------
+-- TODO: don't rely on SL's common bold for countdown timer
+
 local countdown_timer = LoadFont("Common bold")
 countdown_timer.InitCommand=function(self)
    countdown_ref = self
@@ -176,30 +202,6 @@ countdown_timer.InitCommand=function(self)
    self:settext('10')
 end
 
--- ------------------------------------------------------
-
-af.OnCommand=function(self)
-   SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
-   self:queuecommand("StartUpdate")
-end
-
-af.HideUICommand=function(self)
-   helpers.HideUI()
-end
-
-af.StartUpdateCommand=function(self)
-   time_at_start = GetTimeSinceStart()
-   self:SetUpdateFunction( Update )
-end
-
-af.PlayCommand=function(self)
-   time_at_start = GetTimeSinceStart()
-   audio_ref:play()
-end
-
--- ------------------------------------------------------
-
-af[#af+1] = audio_actor
 af[#af+1] = countdown_timer
 
 -- ------------------------------------------------------
@@ -227,10 +229,10 @@ for subtitle_actor in ivalues(subtitle_actors) do
 
    subtitle_actor.actor.PlayCommand=function(self)
       -- if this is the BitmapText actor we want to use for subtitles, set it up!
-      if subtitle_choices[subtitle_choice].characterSet == subtitle_actor.characterSet then
+      if subtitle_choice.characterSet == subtitle_actor.characterSet then
          subtitle_ref = self
 
-         if subtitle_choices[subtitle_choice].bakedFile then
+         if subtitle_choice.bakedFile then
 
          else
             self:zoom(font_zoom)
@@ -241,8 +243,8 @@ for subtitle_actor in ivalues(subtitle_actors) do
          self:vertalign(top):y(170)
          self:diffuse(subtitle_color)
 
-         if subtitle_choices[subtitle_choice].Setup then
-            subtitle_choices[subtitle_choice].Setup(self)
+         if subtitle_choice.Setup then
+            subtitle_choice.Setup(self)
          end
 
       -- otherwise (e.g. the player chooses Simplified Chinese, and this BitmapText actor has latin characters loaded) hibernate it!
@@ -252,9 +254,8 @@ for subtitle_actor in ivalues(subtitle_actors) do
    end
 
    subtitle_actor.actor.SetTextCommand=function(self, params)
-      if subtitle_choices[subtitle_choice].characterSet == subtitle_actor.characterSet then
-
-         if subtitle_choices[subtitle_choice].bakedFile then
+      if subtitle_choice.characterSet == subtitle_actor.characterSet then
+         if subtitle_choice.bakedFile then
             self:setstate(params.frame-1):queuecommand("Show")
          else
             self:settext(params.text)

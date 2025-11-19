@@ -9,8 +9,8 @@ local helpers = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
 local font_zoom             = 1.5
 local subtitle_color        = {1,1,1,1} -- white text by default
 
-local audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
-local subtitle_path
+-- subtitle_path and audio_path will be set when countdown timer ends, signifying players have made their choices
+local audio_path, subtitle_path
 
 local max_subt_width = (_screen.w-64) / font_zoom
 
@@ -50,69 +50,8 @@ local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
-local subtitle_choices = {
-   {
-      file="en",
-      label="English",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
-   },
-   {
-      file="es-MX",
-      label="Español",
-      subLabel="(Latin America)",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
-   },
-   {
-      file="fr",
-      label="Français",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
-   },
-   {
-      file="jp",
-      label="日本語",
-      subtitleActor=jp_subtitle_actor,
-      characterSet="jp",
-      Setup=function(self) self:halign(0):addx(-200) end,
-   },
-   {
-      file="it",
-      label="Italiano",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
-   },
-   {
-      file="ru",
-      label="Русский",
-      subtitleActor=en_subtitle_actor,
-      characterSet="en",
-   },
-   {
-      file="zh-HANS",
-      label="简体中文",
-      subtitleActor=sc_subtitle_actor,
-      characterSet="sc",
-      Setup=function(self) self:halign(0):addx(-200) end,
-   },
-   {
-      file="zh-HANT",
-      label="繁體中文",
-      subtitleActor=tc_subtitle_actor,
-      characterSet="tc",
-      Setup=function(self) self:halign(0):addx(-200) end,
-   },
-   {
-      file="th",
-      bakedFile="th/thai-subtitles.png",
-      label="ภาษาไทย",
-      subtitleActor=th_subtitle_actor,
-      characterSet="th",
-      -- Setup=function(self) self:halign(0):addx(-200) end,
-   },
-}
 
+local subtitle_choices = LoadActor("./subtitle_choices.lua")
 local subtitle_choice = 1
 
 local function InputHandler( event )
@@ -155,7 +94,7 @@ local UpdateTimer = function(af)
    -- load subtitle and audio files based on player choices
    else
       LoadSubtitleFile( subtitle_choices[subtitle_choice].file..".my-heart-almost-stood-still.srt" )
-      -- audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
+      audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
       audio_ref:playcommand("LoadFile")
 
       countdown_ref:visible(false)

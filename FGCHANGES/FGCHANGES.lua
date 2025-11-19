@@ -8,7 +8,6 @@ local helpers = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
 
 local font_zoom             = 1.5
 local subtitle_color        = {1,1,1,1} -- white text by default
-local subtitle_stroke_color = {0,0,0,1} -- black stroke around text by default
 
 local audio_path    = base_path .. "FGCHANGES/media/my-heart-almost-stood-still.ogg"
 local subtitle_path
@@ -37,11 +36,18 @@ local choices_refs = {}
 -- ------------------------------------------------------
 
 -- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
+
+-- TODO: don't rely on SL's common normal
 local en_subtitle_actor = LoadFont("Common normal")
 local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
 local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
+
+-- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
+-- lanauges like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
+-- into sprite frames
 local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" })
+local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
 local subtitle_choices = {
@@ -99,7 +105,8 @@ local subtitle_choices = {
    },
    {
       file="th",
-      label="ภด่",
+      bakedFile="th/thai-subtitles.png",
+      label="ภาษาไทย",
       subtitleActor=th_subtitle_actor,
       characterSet="th",
       -- Setup=function(self) self:halign(0):addx(-200) end,
@@ -174,11 +181,23 @@ local UpdateSubtitles = function()
    local time = GetTimeSinceStart() - time_at_start
 
    if not set and time >= subtitle_data[subtitle_index].Start then
-      subtitle_ref:playcommand("SetText", {text=subtitle_data[subtitle_index].Text})
+      local params = {}
+      if subtitle_choices[subtitle_choice].bakedFile then
+         params.frame = subtitle_index
+      else
+         params.text = subtitle_data[subtitle_index].Text
+      end
+
+      subtitle_ref:playcommand("SetText", params)
       set = true
 
    elseif set and time >= subtitle_data[subtitle_index].End then
-      subtitle_ref:playcommand("SetText", {text=""})
+      if subtitle_choices[subtitle_choice].bakedFile then
+         subtitle_ref:visible(false)
+      else
+         subtitle_ref:playcommand("SetText", {text=""})
+      end
+
       set = false
       subtitle_index = subtitle_index + 1
    end
@@ -272,23 +291,30 @@ local subtitle_actors = {
    {characterSet="sc", actor=sc_subtitle_actor},
    {characterSet="tc", actor=tc_subtitle_actor},
    {characterSet="jp", actor=jp_subtitle_actor},
-   {characterSet="th", actor=th_subtitle_actor},
+   {characterSet="th", actor=th_bakedSubtitle_actor},
    --{characterSet="ko", actor=ko_subtitle_actor},
+   --{characterSet="vi", actor=vi_subtitle_actor},
+   --{characterSet="ru", actor=ru_subtitle_actor},
 }
 
 for subtitle_actor in ivalues(subtitle_actors) do
+   subtitle_actor.actor.InitCommand=function(self) self:animate(false) end
 
    subtitle_actor.actor.PlayCommand=function(self)
       -- if this is the BitmapText actor we want to use for subtitles, set it up!
       if subtitle_choices[subtitle_choice].characterSet == subtitle_actor.characterSet then
          subtitle_ref = self
 
+         if subtitle_choices[subtitle_choice].bakedFile then
+
+         else
+            self:zoom(font_zoom)
+            self:wrapwidthpixels(max_subt_width)
+         end
+
          self:Center()
-         self:zoom(font_zoom)
-         self:wrapwidthpixels(max_subt_width)
          self:vertalign(top):y(170)
          self:diffuse(subtitle_color)
-         self:strokecolor(subtitle_stroke_color)
 
          if subtitle_choices[subtitle_choice].Setup then
             subtitle_choices[subtitle_choice].Setup(self)
@@ -301,8 +327,17 @@ for subtitle_actor in ivalues(subtitle_actors) do
    end
 
    subtitle_actor.actor.SetTextCommand=function(self, params)
-      self:settext(params.text)
+      if subtitle_choices[subtitle_choice].characterSet == subtitle_actor.characterSet then
+
+         if subtitle_choices[subtitle_choice].bakedFile then
+            self:setstate(params.frame-1):queuecommand("Show")
+         else
+            self:settext(params.text)
+         end
+      end
    end
+
+   subtitle_actor.actor.ShowCommand=function(self) self:visible(true) end
 
    af[#af+1] = subtitle_actor.actor
 end

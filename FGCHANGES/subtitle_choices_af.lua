@@ -3,7 +3,7 @@ local af_ref, cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local subtitle_choice = 1
 
-local numCols = 3
+local numCols = 4
 local choiceWidth = 172
 local choiceHeight = 60
 local choiceStroke = 4

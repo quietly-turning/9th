@@ -1,8 +1,6 @@
-local base_path, subtitle_choices = unpack(...)
-local af_ref, cursor_sfx_ref, cursor_triangle_ref
-local choices_refs = {}
-local subtitle_choice = 1
-
+-- ------------------------------------------------------
+-- grid layout configuration
+-- okay to modify these to suit your needs!
 local numCols = 4
 local choiceWidth = 172
 local choiceHeight = 60
@@ -10,6 +8,14 @@ local choiceStroke = 4
 local choicePaddingX = 14
 local choicePaddingY = 18
 
+-- ------------------------------------------------------
+-- variables that need file-scope
+local base_path, subtitle_choices = unpack(...)
+local af_ref, cursor_sfx_ref, cursor_triangle_ref
+local choices_refs = {}
+local subtitle_choice = 1
+
+-- ------------------------------------------------------
 local function InputHandler( event )
    if event.type ~= "InputEventType_FirstPress" then return end
 
@@ -31,6 +37,7 @@ local function InputHandler( event )
 
    end
 end
+-- ------------------------------------------------------
 
 local choices_af = Def.ActorFrame({})
 
@@ -41,18 +48,21 @@ choices_af.HideSubtitleChoicesCommand=function(self)
    self:hibernate(math.huge)
 end
 
+-- ------------------------------------------------------
+-- sound effect played when cursor moves
 choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
    InitCommand=function(self) cursor_sfx_ref = self end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 
+-- help-text instructing players to choose their subtitle language
+-- (XXX: would be better to have this display in the engine's current language)
 choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
    InitCommand=function(self) self:xy(_screen.cx, -46):zoom(0.333):align(0.5, 1) end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 
-
-
+-- triangle cursor to help show which choice is active
 choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
    InitCommand=function(self)
       cursor_triangle_ref = self
@@ -69,6 +79,7 @@ choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
       self:smooth(0.1):y( self:GetY()+3)
    end,
 }
+
 
 for i,v in ipairs(subtitle_choices) do
    local choice_af = Def.ActorFrame({
@@ -169,8 +180,19 @@ for i,v in ipairs(subtitle_choices) do
    choices_af[#choices_af+1] = choice_af
 end
 
+-- ------------------------------------------------------
+-- author's note:
+-- `subtitle_choice` is an int (like `1` or `5`) local to this file
+--  FGCHANGES.lua needs to have access to it, but returning it directly here
+-- like `return {InputHandler, choices_af, subtitle_choice}` won't work
+-- because FGCHANGES.lua will immediately receive the initial *value* of `1` from unpack()!
+-- so, we wrap it in a "getter" function, and return (a reference to) that function
+-- to FGCHANGES, which can call the function to get the value of `subtitle_choice`.
+
 local function GetSubtitleChoice()
   return subtitle_choice
 end
+-- ------------------------------------------------------
+
 
 return {InputHandler, choices_af, GetSubtitleChoice}

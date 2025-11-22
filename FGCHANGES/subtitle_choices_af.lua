@@ -3,6 +3,13 @@ local af_ref, cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local subtitle_choice = 1
 
+local numCols = 3
+local choiceWidth = 172
+local choiceHeight = 60
+local choiceStroke = 4
+local choicePaddingX = 14
+local choicePaddingY = 18
+
 local function InputHandler( event )
    if event.type ~= "InputEventType_FirstPress" then return end
 
@@ -26,6 +33,10 @@ local function InputHandler( event )
 end
 
 local choices_af = Def.ActorFrame({})
+
+choices_af.InitCommand=function(self)
+   self:y(100)
+end
 choices_af.HideSubtitleChoicesCommand=function(self)
    self:hibernate(math.huge)
 end
@@ -36,7 +47,7 @@ choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
 }
 
 choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
-   InitCommand=function(self) self:Center():zoom(0.333) end,
+   InitCommand=function(self) self:xy(_screen.cx, -46):zoom(0.333):align(0.5, 1) end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 
@@ -45,11 +56,11 @@ choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
 choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
    InitCommand=function(self)
       cursor_triangle_ref = self
-      self:zoom(0.5):queuecommand("Move")
+      self:zoom(0.5):align(0.5,1):queuecommand("Move")
    end,
    MoveCommand=function(self)
       self:x(choices_refs[subtitle_choice]:GetX())
-      self:y(choices_refs[subtitle_choice]:GetY()-47)
+      self:y(choices_refs[subtitle_choice]:GetY()-((choiceHeight+choiceStroke)/2)-1)
       self:queuecommand("Bump")
    end,
    BumpCommand=function(self)
@@ -61,22 +72,22 @@ choices_af[#choices_af+1] = LoadActor("./img/cursor-triangle.png")..{
 
 for i,v in ipairs(subtitle_choices) do
    local choice_af = Def.ActorFrame({
-      name=v.file.."-choice",
+      Name=("%s-choice"):format(v.file),
 
       InitCommand=function(self)
          choices_refs[i] = self
-         self:x(_screen.cx + (((i-1)%3)-1)*200)
-         self:y( (math.floor((i-1)/3)*100) + 170)
+         self:x(_screen.cx + (((i-1) % numCols) - math.floor(numCols/2)) * (choiceWidth + choicePaddingX) + (numCols%2==0 and (choiceWidth/2) or 0))
+         self:y((math.floor((i-1) / numCols) * (choiceHeight+choicePaddingY)))
          if (i==1) then self:queuecommand("GainFocus") end
       end,
    })
 
 
    choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
-      Name="choice-stroke",
+      Name=("%s choice-stroke"):format(v.file),
       InitCommand=function(self)
          self:diffuse(1, 1, 1, 1)
-         self:zoomto(176, 76):visible(false)
+         self:zoomto(choiceWidth+choiceStroke, choiceHeight+choiceStroke):visible(false)
          self:glowshift()
          self:effectcolor1(color("#818cf8"))
          self:effectcolor2(color("#6366f1"))
@@ -91,10 +102,10 @@ for i,v in ipairs(subtitle_choices) do
    }
 
    choice_af[#choice_af+1] = LoadActor("./img/choice-bg.png")..{
-      Name="choice-bg",
+      Name=("%s choice-bg"):format(v.file),
       InitCommand=function(self)
          self:diffuse(color("94a3b8"))
-         self:zoom(0.333)
+         self:zoomto(choiceWidth, choiceHeight)
       end,
       GainFocusCommand=function(self)
          self:diffuse(color("#4f46e5"))
@@ -130,6 +141,7 @@ for i,v in ipairs(subtitle_choices) do
 
    end
 
+   choice_font_actor.Name = ("%s label"):format(v.file)
    choice_font_actor.Text = v.label
    choice_font_actor.InitCommand=function(self)
       self:diffuse(0,0,0,1):zoom(1.5)
@@ -144,6 +156,7 @@ for i,v in ipairs(subtitle_choices) do
    choice_af[#choice_af+1] = choice_font_actor
 
    choice_af[#choice_af+1] = LoadFont("Common normal")..{
+      Name=("%s sub-label"):format(v.file),
       Text=v.subLabel,
       Condition=v.subLabel ~= nil,
       InitCommand=function(self)

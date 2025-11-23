@@ -27,6 +27,12 @@ return {
       Setup=function(self) self:halign(0):addx(-200) end,
    },
    {
+      file="ko",
+      label="한국어",
+      characterSet="ko",
+      Setup=function(self) self:halign(0):addx(-200) end,
+   },
+   {
       file="zh-HANS",
       label="简体中文",
       characterSet="sc",

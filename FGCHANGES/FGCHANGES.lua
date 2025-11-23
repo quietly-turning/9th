@@ -41,6 +41,7 @@ local en_subtitle_actor = LoadFont("Common normal")
 local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
 local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
+local ko_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans KR 20px/_Noto Sans KR 20px.ini" })
 
 -- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
 -- languages like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
@@ -219,7 +220,7 @@ local subtitle_actors = {
    {characterSet="tc", actor=tc_subtitle_actor},
    {characterSet="jp", actor=jp_subtitle_actor},
    {characterSet="th", actor=th_bakedSubtitle_actor},
-   --{characterSet="ko", actor=ko_subtitle_actor},
+   {characterSet="ko", actor=ko_subtitle_actor},
    --{characterSet="vi", actor=vi_subtitle_actor},
    --{characterSet="ru", actor=ru_subtitle_actor},
 }

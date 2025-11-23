@@ -1,0 +1,48 @@
+korean localizer:
+  there's a phrase "atom is spent"
+
+quietly-turning:
+  there sure is
+
+korean localizer:
+  and initially i thought she was referring to atomic explosion
+  i looked up the date of the letter
+  and it couldn't be it
+  and i'm still not exactly sure about it
+
+quietly-turning:
+  it's a curious turn of phrase
+
+korean localizer:
+  so here i said "like scattering winds after"
+  i initially had it as "like scattering winds after the eruption"
+  but i went towards the vague way
+  i thought explicitly saying the eruption was too clear and too strong
+  when it's followed by "shower of delicate notes"
+
+quietly-turning:
+  poetry :)
+
+korean localizer:
+  what about u?
+  what do u think that phrase means
+
+quietly-turning:
+  I'll consult google ngrams at some point, but until then
+  
+  Bohr's proposed model of the atom as the fundamental unit of the
+  universe would have been established and recent at the time of writing
+  
+  (checking wikipedia, he received the nobel prize in physics for it in
+  1922, so yeah!)
+  
+  with that context, I always took the phrase to suggest "when all energy
+  needed to propel this creative thing has been used" not in a heat death
+  sense, but evoking-the-language-of-physics-for-poetic-effect, as though
+  atoms are consumable units of effort and work
+  
+  gotta say,
+  it is easier/lighter to dance around thinly-veiled dick jokes while
+  working on peacock for LEFTS, than to deliberate the idiosyncrasies of
+  Ms. Keller's word choices from a century ago but i'm glad both can exist
+  (o, the duality of man) and wouldn't want it any other way

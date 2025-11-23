@@ -16,26 +16,27 @@ local choices_refs = {}
 local subtitle_choice = 1
 
 -- ------------------------------------------------------
-local function InputHandler( event )
-   if event.type ~= "InputEventType_FirstPress" then return end
 
-   if event.GameButton == "MenuLeft" then
-      choices_refs[subtitle_choice]:playcommand("LoseFocus")
+local InputActions = {
+   MenuLeft = function()
       subtitle_choice = subtitle_choice - 1
       if (subtitle_choice==0) then subtitle_choice=#subtitle_choices end
-      choices_refs[subtitle_choice]:playcommand("GainFocus")
-      cursor_sfx_ref:play()
-      cursor_triangle_ref:playcommand("Move")
-
-   elseif event.GameButton == "MenuRight" then
-      choices_refs[subtitle_choice]:playcommand("LoseFocus")
+   end,
+   MenuRight = function()
       subtitle_choice = subtitle_choice + 1
       if (subtitle_choice>#subtitle_choices) then subtitle_choice=1 end
-      choices_refs[subtitle_choice]:playcommand("GainFocus")
-      cursor_sfx_ref:play()
-      cursor_triangle_ref:playcommand("Move")
-
    end
+}
+
+local function InputHandler( event )
+   if event.type ~= "InputEventType_FirstPress" then return end
+   if not InputActions[event.GameButton]        then return end
+
+   choices_refs[subtitle_choice]:playcommand("LoseFocus")
+   InputActions[event.GameButton]()
+   choices_refs[subtitle_choice]:playcommand("GainFocus")
+   cursor_sfx_ref:play()
+   cursor_triangle_ref:playcommand("Move")
 end
 -- ------------------------------------------------------
 

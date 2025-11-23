@@ -18,13 +18,38 @@ local subtitle_choice = 1
 -- ------------------------------------------------------
 
 local InputActions = {
+   -- decrement by 1, wrap to end if needed
    MenuLeft = function()
       subtitle_choice = subtitle_choice - 1
-      if (subtitle_choice==0) then subtitle_choice=#subtitle_choices end
+      if (subtitle_choice <= 0) then subtitle_choice=#subtitle_choices end
    end,
+
+   -- increment by 1, wrap to start if needed
    MenuRight = function()
       subtitle_choice = subtitle_choice + 1
       if (subtitle_choice>#subtitle_choices) then subtitle_choice=1 end
+   end,
+
+   -- decrement by numCols, wrap-and-maintain-column if needed
+   MenuUp = function()
+      subtitle_choice = subtitle_choice - numCols
+      if (subtitle_choice <= 0) then
+         if (subtitle_choice%numCols > #subtitle_choices%numCols) then
+            subtitle_choice = math.floor(#subtitle_choices/numCols)*numCols + subtitle_choice
+         else
+            subtitle_choice = math.ceil(#subtitle_choices/numCols)*numCols + subtitle_choice
+            if (subtitle_choice>#subtitle_choices) then subtitle_choice=math.floor(#subtitle_choices/numCols)*numCols end
+         end
+      end
+   end,
+
+   -- increment by numCols, wrap-and-maintain-column if needed
+   MenuDown = function()
+      subtitle_choice = subtitle_choice + numCols
+      if (subtitle_choice>#subtitle_choices) then
+         subtitle_choice = subtitle_choice%numCols
+         if (subtitle_choice <= 0) then subtitle_choice=numCols end
+      end
    end
 }
 

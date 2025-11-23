@@ -56,12 +56,13 @@ local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle
 
 -- ------------------------------------------------------
 local timer_done = false
+local timer_start_seconds = 10
 
 local UpdateTimer = function(af)
    if type(time_at_start)~="number" then return false end
 
    local time = GetTimeSinceStart() - time_at_start
-   local timer_text = math.round(10 - time)
+   local timer_text = math.round(timer_start_seconds - time)
 
    -- time still remaining on countdown timer; update it
    if (timer_text > 0) then
@@ -194,13 +195,12 @@ af[#af+1] = audio_actor
 
 
 -- ------------------------------------------------------
--- TODO: don't rely on SL's common bold for countdown timer
 
-local countdown_timer = LoadFont("Common bold")
+local countdown_timer = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans - Bold Digits 40px/_Noto Sans Bold 40px.ini" })
 countdown_timer.InitCommand=function(self)
    countdown_ref = self
-   self:halign(1):valign(0):xy(_screen.w-32, 10):zoom(1)
-   self:settext('10')
+   self:halign(1):valign(0):xy(_screen.w-32, 10):diffuse(0.7,0.7,0.7,1)
+   self:settext(timer_start_seconds)
 end
 
 af[#af+1] = countdown_timer

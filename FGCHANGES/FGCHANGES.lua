@@ -36,8 +36,7 @@ local subtitle_ref, audio_ref, countdown_ref
 
 -- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
 
--- TODO: don't rely on SL's common normal
-local en_subtitle_actor = LoadFont("Common normal")
+local en_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans 20px/_Noto Sans 20px.ini" })
 local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
 local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
@@ -196,7 +195,7 @@ af[#af+1] = audio_actor
 
 -- ------------------------------------------------------
 
-local countdown_timer = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans - Bold Digits 40px/_Noto Sans Bold 40px.ini" })
+local countdown_timer = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans - Bold [digits] 40px/_Noto Sans Bold 40px.ini" })
 countdown_timer.InitCommand=function(self)
    countdown_ref = self
    self:halign(1):valign(0):xy(_screen.w-32, 10):diffuse(0.7,0.7,0.7,1)

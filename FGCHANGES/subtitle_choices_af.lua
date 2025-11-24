@@ -63,6 +63,7 @@ local function InputHandler( event )
    cursor_sfx_ref:play()
    cursor_triangle_ref:playcommand("Move")
 end
+
 -- ------------------------------------------------------
 
 local choices_af = Def.ActorFrame({})
@@ -155,10 +156,8 @@ for i,v in ipairs(subtitle_choices) do
 
    local choice_font_actor
 
-   -- TODO: don't rely on SL's Common normal
-   --       replace with custom bundled font
    if     v.characterSet == "en" then
-      choice_font_actor = LoadFont("Common normal")
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans 20px/_Noto Sans 20px.ini" }
 
    -- simplified chinese
    elseif v.characterSet == "sc" then

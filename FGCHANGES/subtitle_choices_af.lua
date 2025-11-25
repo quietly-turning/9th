@@ -10,7 +10,7 @@ local choicePaddingY = 18
 
 -- ------------------------------------------------------
 -- variables that need file-scope
-local base_path, subtitle_choices = unpack(...)
+local base_path, subtitle_choices, doubleres = unpack(...)
 local af_ref, cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local subtitle_choice = 1
@@ -157,7 +157,7 @@ for i,v in ipairs(subtitle_choices) do
    local choice_font_actor
 
    if     v.characterSet == "en" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans 20px/_Noto Sans 20px.ini" }
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini" }
 
    -- simplified chinese
    elseif v.characterSet == "sc" then
@@ -184,7 +184,7 @@ for i,v in ipairs(subtitle_choices) do
    choice_font_actor.Name = ("%s label"):format(v.file)
    choice_font_actor.Text = v.label
    choice_font_actor.InitCommand=function(self)
-      self:diffuse(0,0,0,1):zoom(1.5)
+      self:diffuse(0,0,0,1):zoom(doubleres[v.characterSet] and 1.2 or 0.6)
       if (v.subLabel ~= nil) then
          self:y(-7)
       end

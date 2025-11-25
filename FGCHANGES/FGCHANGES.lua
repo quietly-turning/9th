@@ -6,12 +6,14 @@ local helpers = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
 
 -- ------------------------------------------------------
 
-local font_zoom             = 1.5
 local subtitle_color        = {1,1,1,1} -- white text by default
 
 -- subtitle_path and audio_path will be set when countdown timer ends, signifying players have made their choices
 local audio_path, subtitle_path
 
+-- -------------------------------------------------------------------------------
+
+local font_zoom      = 0.6
 local max_subt_width = (_screen.w-64) / font_zoom
 
 -- -------------------------------------------------------------------------------
@@ -74,7 +76,7 @@ local subtitle_ref, audio_ref, countdown_ref
 
 -- reference: https://quietly-turning.github.io/Lua-For-SM5/LuaAPI#Actors-BitmapText
 
-local en_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans 20px/_Noto Sans 20px.ini" })
+local en_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini" })
 local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" })
 local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
@@ -89,7 +91,7 @@ local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/t
 -- ------------------------------------------------------
 local subtitle_choice
 local subtitle_choices = LoadActor("./subtitle_choices.lua")
-local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices}))
+local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
 
 -- ------------------------------------------------------
 local timer_done = false
@@ -273,7 +275,7 @@ for subtitle_actor in ivalues(subtitle_actors) do
          if subtitle_choice.bakedFile then
 
          else
-            self:zoom(font_zoom)
+            self:zoom( doubleres[subtitle_actor.characterSet] and (font_zoom * 2) or font_zoom)
             self:wrapwidthpixels(max_subt_width)
          end
 

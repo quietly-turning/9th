@@ -14,6 +14,44 @@ local audio_path, subtitle_path
 
 local max_subt_width = (_screen.w-64) / font_zoom
 
+-- -------------------------------------------------------------------------------
+-- A RANT ABOUT USING THE "(doubleres)" TEXTURE HINT IN FONTS
+--
+-- I ended up needing to use a mixture of "doubleres" fonts and non-doubleres-fonts
+-- in this project.  bitmap fonts in stepmania need a "pixel width" per-character.
+-- for example, in "_Noto Sans 40px.ini", I need to specify that "E" is 17px wide
+-- while "l" is 6px wide, so stepmania knows how to draw text.
+--
+-- when you add "(doubleres)" to your filename, stepmania's RageBitmapTexture.cpp code
+-- will *effectively* draw the asset at half-the-size-with-twice-the-detail,
+-- useful for modern LCD displays that perform pixel-doubling ("retina displays" as branded by Apple)
+--
+-- and with doubleres BitmapTexts, per-character-pixel-widths need to be halved,
+-- meaning that if "e" is 18px wide as a 40px-font, it's 9px wide as a 20px-doubleres-font.
+--
+-- when "d" is 19px wide as a 40px-font, should you round down to 9 or up to 10 as a 20px-doubleres-font?
+--
+-- in practice, I found this loss-of-precision limiting.  the 20px-doubleres-font looked uglier because
+-- I couldn't get the kerning right.  so I didn't use "(doubleres)" in the filename for Noto Sans 40px.
+--
+-- the monospaced fonts used in this stepchart (like Chinese and Japanese) have characters that are ALL
+-- the same pixel width and happen to all be 40px (because I made them that way), which cleanly divides
+-- in half to 20, so I'm leaving the "(doubleres)" texture hint intact there.
+--
+-- this is not to suggest you should do similarly in your stepchart-scripting-efforts,
+-- it's just what I found worked for this project's needs.
+
+local doubleres = {
+   en=false,
+   sc=true,
+   tc=true,
+   jp=true,
+   th=true,
+   ko=true,
+}
+-- -------------------------------------------------------------------------------
+
+
 -- ------------------------------------------------------
 
 -- get parser helper function

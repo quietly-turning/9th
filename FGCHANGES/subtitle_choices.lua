@@ -53,7 +53,7 @@ return {
    },
    {
       file="ru",
-      label="Русский",
-      characterSet="en",
+      label="русский",
+      characterSet="ru",
    },
 }

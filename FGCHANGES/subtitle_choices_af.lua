@@ -179,6 +179,9 @@ for i,v in ipairs(subtitle_choices) do
    elseif v.characterSet == "th" then
       choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" }
 
+   -- russian
+   elseif v.characterSet == "ru" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans RU 40px/_Noto Sans RU 40px.ini" }
    end
 
    choice_font_actor.Name = ("%s label"):format(v.file)

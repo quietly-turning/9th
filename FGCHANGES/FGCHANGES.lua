@@ -41,7 +41,7 @@ local max_subt_width = (_screen.w-64) / font_zoom
 -- in half to 20, so I'm leaving the "(doubleres)" texture hint intact there.
 --
 -- this is not to suggest you should do similarly in your stepchart-scripting-efforts,
--- it's just what I found worked for this project's needs.
+-- it's just what I found worked for this project's needs.   quietly-turning
 
 local doubleres = {
    en=false,
@@ -50,6 +50,7 @@ local doubleres = {
    jp=true,
    th=true,
    ko=true,
+   ru=false,
 }
 -- -------------------------------------------------------------------------------
 
@@ -81,6 +82,8 @@ local sc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" })
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
 local ko_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans KR 20px/_Noto Sans KR 20px.ini" })
+local ru_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans RU 40px/_Noto Sans RU 40px.ini" })
+
 
 -- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
 -- languages like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
@@ -260,8 +263,8 @@ local subtitle_actors = {
    {characterSet="jp", actor=jp_subtitle_actor},
    {characterSet="th", actor=th_bakedSubtitle_actor},
    {characterSet="ko", actor=ko_subtitle_actor},
-   --{characterSet="vi", actor=vi_subtitle_actor},
-   --{characterSet="ru", actor=ru_subtitle_actor},
+   {characterSet="ru", actor=ru_subtitle_actor},
+   --{characterSet="vn", actor=vn_subtitle_actor},
 }
 
 for subtitle_actor in ivalues(subtitle_actors) do

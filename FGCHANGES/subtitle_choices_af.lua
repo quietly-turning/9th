@@ -179,6 +179,10 @@ for i,v in ipairs(subtitle_choices) do
    elseif v.characterSet == "th" then
       choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" }
 
+   -- vietnamese
+   elseif v.characterSet == "vn" then
+      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans VN 40px/_Noto Sans VN 40px.ini" }
+
    -- russian
    elseif v.characterSet == "ru" then
       choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans RU 40px/_Noto Sans RU 40px.ini" }

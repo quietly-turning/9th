@@ -83,6 +83,7 @@ local tc_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local jp_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" })
 local ko_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans KR 20px/_Noto Sans KR 20px.ini" })
 local ru_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans RU 40px/_Noto Sans RU 40px.ini" })
+local vn_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans VN 40px/_Noto Sans VN 40px.ini" })
 
 
 -- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
@@ -264,7 +265,7 @@ local subtitle_actors = {
    {characterSet="th", actor=th_bakedSubtitle_actor},
    {characterSet="ko", actor=ko_subtitle_actor},
    {characterSet="ru", actor=ru_subtitle_actor},
-   --{characterSet="vn", actor=vn_subtitle_actor},
+   {characterSet="vn", actor=vn_subtitle_actor},
 }
 
 for subtitle_actor in ivalues(subtitle_actors) do

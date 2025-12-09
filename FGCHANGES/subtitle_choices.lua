@@ -52,6 +52,11 @@ return {
       -- Setup=function(self) self:halign(0):addx(-200) end,
    },
    {
+      file="vn",
+      label="Tiếng Việt",
+      characterSet="vn",
+   },
+   {
       file="ru",
       label="русский",
       characterSet="ru",

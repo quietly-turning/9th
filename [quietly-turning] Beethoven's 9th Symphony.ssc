@@ -9,10 +9,10 @@
 #ORIGIN:;
 #CREDIT:quietly-turning;
 #BANNER:_bn - Beethoven Symphony No. 9.png;
-#BACKGROUND:;
+#BACKGROUND:BGCHANGES/black.png;
 #PREVIEW:_preview - Beethoven Symphony No. 9.ogg;
 #PREVIEWVID:;
-#JACKET:;
+#JACKET:_bn - Beethoven Symphony No. 9.png;
 #CDIMAGE:;
 #DISCIMAGE:;
 #LYRICSPATH:;
@@ -40,7 +40,7 @@
 #FAKES:;
 #LABELS:0.000=Song Start;
 #LASTSECONDHINT:209.000000;
-#BGCHANGES:;
+#BGCHANGES:0=BGCHANGES/black.png=1.000=0=0=0;
 #FGCHANGES:0.000=./FGCHANGES/FGCHANGES.lua=1.000=0=0=0=StretchNoLoop====;
 #KEYSOUNDS:;
 #ATTACKS:;

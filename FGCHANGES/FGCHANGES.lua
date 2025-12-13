@@ -59,8 +59,8 @@ local doubleres = {
 local ParseFile = dofile(base_path.."FGCHANGES/scripts/subtitle-parsers/srt-parser.lua")
 local subtitle_data
 
-local LoadSubtitleFile = function(filename)
-   subtitle_path = ("%sFGCHANGES/media/subtitles/%s"):format(base_path, filename)
+local LoadSubtitleFile = function(audioFilename, subtitleFilename)
+   subtitle_path = ("%sFGCHANGES/media/subtitles/%s/%s"):format(base_path, audioFilename, subtitleFilename)
 
    -- parse subtitle file, get data
    subtitle_data = ParseFile(subtitle_path)
@@ -88,7 +88,7 @@ local vn_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 -- leaving written languages like Thai script unable to render in a BitmapText.  for now, recourse is to support
 -- entire lines of subtitles baked into sprite frames
 local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" })
-local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
+local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/_prebaked/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
 local subtitle_choice
@@ -114,7 +114,11 @@ local UpdateTimer = function(af)
    -- load subtitle and audio files based on player choices
    else
       subtitle_choice = subtitle_choices[GetSubtitleChoice()]
-      LoadSubtitleFile( subtitle_choice.file..".my-heart-almost-stood-still.srt" )
+
+      local audioFilename    = "en-A"  -- TODO: don't hardcode
+      local subtitleFilename = ("%s.my-heart-almost-stood-still.srt"):format(subtitle_choice.file)
+
+      LoadSubtitleFile( audioFilename, subtitleFilename )
       audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
       audio_ref:playcommand("LoadFile")
 
@@ -257,7 +261,7 @@ af[#af+1] = countdown_timer
 --      https://github.com/itgmania/itgmania/blob/159391b8a244cffdde9366b97e6a2d03f9cfb6b8/src/Font.cpp#L831
 --
 --      thus...
---      english characters get a BitmapText actor,
+--      [english, spanish, italian, french] characters get a BitmapText actor,
 --      simplified chinese characters get a BitmapText actor,
 --      Vietnamese characters get a BitmapText actor,
 --      etc.
@@ -278,7 +282,7 @@ for subtitle_actor in ivalues(subtitle_actors) do
 
    subtitle_actor.actor.PlayCommand=function(self)
       -- if this is the BitmapText actor we want to use for subtitles, set it up!
-      if subtitle_choice.font == subtitle_actor.actor.File then
+      if (subtitle_choice.font == subtitle_actor.actor.File) or (subtitle_choice.bakedFile and subtitle_choice.file==subtitle_actor.file) then
          subtitle_ref = self
 
          if subtitle_choice.bakedFile then

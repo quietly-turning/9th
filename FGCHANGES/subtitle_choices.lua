@@ -48,7 +48,7 @@ return {
    },
    {
       file="th",
-      bakedFile="th/thai-subtitles.png",
+      bakedFile=true,
       label="ภาษาไทย",
       font=("%sFGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini"):format(base_path),
    },

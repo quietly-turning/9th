@@ -84,9 +84,9 @@ local ru_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local vn_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans VN 40px/_Noto Sans VN 40px.ini" })
 
 
--- as of November 2025, Font.cpp doesn't appear to support superimposing diacritics over alphabet characters, leaving written
--- languages like Thai script unable to render in a BitmapText.  for now, recourse is to support entire lines of subtitles baked
--- into sprite frames
+-- as of November 2025, ITGm's Font.cpp doesn't appear to support superimposing diacritics over alphabet characters,
+-- leaving written languages like Thai script unable to render in a BitmapText.  for now, recourse is to support
+-- entire lines of subtitles baked into sprite frames
 local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" })
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/th/thai-subtitles 3x10 (doubleres).png")
 
@@ -247,13 +247,20 @@ end
 af[#af+1] = countdown_timer
 
 -- ------------------------------------------------------
--- XXX: clunky Lua to create one unique BitmapText actor per-glyph-set needed. :(
+-- XXX: create one unique BitmapText actor per-glyph-set needed. :(
+--
 --      it doesn't seem possible to create a single "import" font from within a stepchart
 --      that combines all custom-fonts-local-to-this-stepchart.  (if that were possible,
 --      we could have a single BitmapText actor for subtitles that has all possible characters needed.)
 --      but, it looks like specifying "import=" in a font's ini file is hardcoded to look
 --      in the current theme's Fonts folder, which doesn't help us from the context of this stepchart.
 --      https://github.com/itgmania/itgmania/blob/159391b8a244cffdde9366b97e6a2d03f9cfb6b8/src/Font.cpp#L831
+--
+--      thus...
+--      english characters get a BitmapText actor,
+--      simplified chinese characters get a BitmapText actor,
+--      Vietnamese characters get a BitmapText actor,
+--      etc.
 
 local subtitle_actors = {
    {file="en", actor=en_subtitle_actor},

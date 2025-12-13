@@ -1,53 +1,53 @@
 1
-00:00:00,240 --> 00:00:04,960
+00:00:01.120 --> 00:00:05.760
 Chers amis,
 J’ai la joie
 de pouvoir vous dire que,
 
 2
-00:00:04,960 --> 00:00:12,800
+00:00:05.760 --> 00:00:11.920
 j’ai passé hier soir une heure glorieuse
 à écouter par la radio
 la Neuvième Symphonie de Beethoven.
 
 3
-00:00:12,800 --> 00:00:18,400
+00:00:11.920 --> 00:00:17.200
 Hier soir, tandis que ma famille
 écoutait votre merveilleuse interprétation
 de la symphonie immortelle,
 
 4
-00:00:18,400 --> 00:00:26,529
+00:00:17.200 --> 00:00:22.400
 quelqu’un me suggéra de poser la main
 sur le récepteur pour voir si je pouvais
 en eprouver les vibrations.
 
 5
-00:00:26,529 --> 00:00:32,028
+00:00:22.400 --> 00:00:26.560
 On dévissa le capuchon,
 et je touchai légèrement
 le diaphragme sensible.
 
 6
-00:00:32,028 --> 00:00:39,026
+00:00:26.560 --> 00:00:30.880
 Quelle ne fut pas ma stupeur
 de découvrir que je pouvais sentir,
 non seulement les vibrations,
 
 7
-00:00:39,026 --> 00:00:46,025
+00:00:30.880 --> 00:00:35.200
 mais encore le rythme passionné,
 le battement et l’élan de la musique!
 
 8
-00:00:46,025 --> 00:00:52,024
+00:00:35.200 --> 00:00:40.800
 Les vibrations entremêlées
 et entrelacées
 des instruments diver
 m’enchantaient.
 
 9
-00:00:52,024 --> 00:01:02,080
+00:00:40.800 --> 00:00:49.600
 Je pouvais réellement distinguer
 les cors,
 le roulement des tambours,
@@ -56,52 +56,52 @@ et les violons
 chantent en harmonie exquise.
 
 10
-00:01:02,080 --> 00:01:09,520
+00:00:49.600 --> 00:00:56.160
 Comme le langage doux des violons
 s’épanchait et se mouvait sur les sons plus profonds
 des autres instruments!
 
 11
-00:01:09,520 --> 00:01:17,019
+00:00:56.160 --> 00:01:02.640
 Quand la voix humaine s’éleva,
 jaillissante et tremblante
 du flot de l’harmonie,
 je la reconnus aussitôt.
 
 12
-00:01:17,019 --> 00:01:23,551
+00:01:02.640 --> 00:01:08.640
 Je sentis le chœur commence a croître,
 plus exalté, plus extatique,
 s’élançant rapide et flamboyant,
 
 13
-00:01:23,551 --> 00:01:26,683
+00:01:08.640 --> 00:01:11.840
 jusqu’à ce que mon cœur
 en fût presque suspendu.
 
 14
-00:01:26,683 --> 00:01:35,815
+00:01:12.560 --> 00:01:21.680
 Les voix des femmes semblaient l’incarnation
 de toutes les voix angéliques
 en se ruant en un flot harmonieux
 de sons beaux et inspirants.
 
 15
-00:01:35,815 --> 00:01:42,047
+00:01:21.680 --> 00:01:26.560
 Le grand chœur
 vibrait contre les doigts,
 avec des pauses poignantes
 et des flux.
 
 16
-00:01:42,047 --> 00:01:49,612
+00:01:26.560 --> 00:01:33.600
 Puis tous les instruments
 et toutes les voix éclatèrent
 ensemble — un océan
 de vibrations célestes
 
 17
-00:01:49,612 --> 00:01:58,177
+00:01:33.600 --> 00:01:41.440
 et s’évanouirent
 comme les vents lorsque
 l’atome est consumé,
@@ -109,38 +109,38 @@ en se terminant en une pluie fine
 de notes suaves.
 
 18
-00:01:59,840 --> 00:02:09,508
+00:01:41.440 --> 00:01:50.960
 Bien sûr, ce n’était point « entendre »,
 mais je sais que les tons et les harmonies
 me transmettaient des élans
 de beauté et de majesté.
 
 19
-00:02:09,508 --> 00:02:16,340
+00:01:50.960 --> 00:01:56.880
 Je crus que même percevoir
 les sons tendres de la nature
 qui chantent dans la main:
 
 20
-00:02:16,340 --> 00:02:20,673
+00:01:56.880 --> 00:02:01.520
 les roseaux oscillants,
 le vent,
 et le murmure des ruisseaux.
 
 21
-00:02:20,673 --> 00:02:27,671
+00:02:01.520 --> 00:02:07.760
 Jamais encore je n’avais été aussi ravie
 par une multitude de vibrations sonores.
 
 22
-00:02:20,673 --> 00:02:33,437
+00:02:07.760 --> 00:02:13.680
 Tandis que j’écoutais,
 avec l’obscurité et la mélodie,
 l’ombre et le son
 emplissant toute la chambre,
 
 23
-00:02:33,437 --> 00:02:43,402
+00:02:13.680 --> 00:02:22.560
 je ne pouvais m’empêcher
 de songer que le grand compositeur,
 qui versa ainsi tant
@@ -148,14 +148,14 @@ de douceur dans le monde,
 était sourd comme moi.
 
 24
-00:02:43,402 --> 00:02:52,332
+00:02:22.560 --> 00:02:31.280
 Je m’émerveillai de la puissance
 de son esprit inextinguible,
 par laquelle, de sa douleur,
 il tira tant de joie pour les autres.
 
 25
-00:02:52,332 --> 00:03:04,640
+00:02:31.280 --> 00:02:42.480
 Et là, j’étais assise,
 en sentant de la main
 la symphonie magnifique
@@ -164,7 +164,7 @@ sur les rivages silencieux
 de son âme et du mien.
 
 26
-00:03:04,640 --> 00:03:12,696
+00:02:42.480 -->  00:02:50.480
 Permettez-moi de vous
 remercier chaleureusement
 pour tout le bonheur
@@ -173,10 +173,10 @@ a apporté à ma maison
 et à moi-même.
 
 27
-00:03:12,996 --> 00:03:16,073
+00:02:50.480 --> 00:02:53.360
 Avec mes sentiments les plus affectueux
 et mes vœux les plus sincères,
 
 28
-00:03:16,229 --> 00:03:19,995
+00:02:53.360 --> 00:02:58.720
 Helen Keller

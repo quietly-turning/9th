@@ -93,7 +93,8 @@ local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/_
 -- ------------------------------------------------------
 local subtitle_choice
 local subtitle_choices = LoadActor("./subtitle_choices.lua")
-local InputHandler, choices_af, GetSubtitleChoice = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
+local SubtitleChoiceInputHandler,  subtitle_choices_af,  GetSubtitleChoice  = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
+local VoiceOverChoiceInputHandler, voiceover_choices_af, GetVoiceOverChoice = unpack(LoadActor("./voiceover_choices_af.lua", {base_path}))
 
 -- ------------------------------------------------------
 local timer_done = false
@@ -113,13 +114,15 @@ local UpdateTimer = function(af)
    -- countdown timer has ended
    -- load subtitle and audio files based on player choices
    else
-      subtitle_choice = subtitle_choices[GetSubtitleChoice()]
+      subtitle_choice  = subtitle_choices[GetSubtitleChoice()]
+      voiceover_choice = GetVoiceOverChoice()
 
-      local audioFilename    = "en-A"  -- TODO: don't hardcode
+      local audioFilename    = voiceover_choice.file
       local subtitleFilename = ("%s.my-heart-almost-stood-still.srt"):format(subtitle_choice.file)
 
       LoadSubtitleFile( audioFilename, subtitleFilename )
-      audio_path    = base_path .. "FGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"
+
+      audio_path    = ("%sFGCHANGES/media/audio/%s.my-heart-almost-stood-still.ogg"):format(base_path, audioFilename)
       audio_ref:playcommand("LoadFile")
 
       countdown_ref:visible(false)
@@ -189,8 +192,17 @@ end
 local af = Def.ActorFrame{}
 
 af.OnCommand=function(self)
-   SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
+   SCREENMAN:GetTopScreen():AddInputCallback( SubtitleChoiceInputHandler )
    self:queuecommand("StartUpdate")
+end
+
+af.SubtitleChosenMessageCommand=function(self)
+   SCREENMAN:GetTopScreen():RemoveInputCallback( SubtitleChoiceInputHandler )
+   SCREENMAN:GetTopScreen():AddInputCallback( VoiceOverChoiceInputHandler )
+end
+
+af.VoiceOverChosenMessageCommand=function(self)
+   SCREENMAN:GetTopScreen():RemoveInputCallback( VoiceOverChoiceInputHandler )
 end
 
 af.HideUICommand=function(self)
@@ -205,6 +217,9 @@ end
 af.PlayCommand=function(self)
    time_at_start = GetTimeSinceStart()
    audio_ref:play()
+
+   SCREENMAN:GetTopScreen():RemoveInputCallback( SubtitleChoiceInputHandler )
+   SCREENMAN:GetTopScreen():RemoveInputCallback( VoiceOverChoiceInputHandler )
 end
 
 -- ------------------------------------------------------
@@ -323,6 +338,7 @@ end
 
 -- ------------------------------------------------------
 
-af[#af+1] = choices_af
+af[#af+1] = subtitle_choices_af
+af[#af+1] = voiceover_choices_af
 
 return af

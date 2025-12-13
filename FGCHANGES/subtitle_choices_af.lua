@@ -8,10 +8,13 @@ local choiceStroke = 4
 local choicePaddingX = 14
 local choicePaddingY = 18
 
+local af_y_offset = 100
+local instruction_y_offset_from_af = -46
+
 -- ------------------------------------------------------
 -- variables that need file-scope
 local base_path, subtitle_choices, doubleres = unpack(...)
-local af_ref, cursor_sfx_ref, cursor_triangle_ref
+local cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local subtitle_choice = 1
 
@@ -69,7 +72,7 @@ end
 local choices_af = Def.ActorFrame({})
 
 choices_af.InitCommand=function(self)
-   self:y(100)
+   self:y(af_y_offset)
 end
 choices_af.HideSubtitleChoicesCommand=function(self)
    self:hibernate(math.huge)
@@ -85,7 +88,7 @@ choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
 -- help-text instructing players to choose their subtitle language
 -- (XXX: would be better to have this display in the engine's current language)
 choices_af[#choices_af+1] = LoadActor("./img/choose-subtitle-language.png")..{
-   InitCommand=function(self) self:xy(_screen.cx, -46):zoom(0.333):align(0.5, 1) end,
+   InitCommand=function(self) self:xy(_screen.cx, instruction_y_offset_from_af):zoom(0.333):align(0.5, 1) end,
    HideCommand=function(self) self:hibernate(math.huge) end
 }
 

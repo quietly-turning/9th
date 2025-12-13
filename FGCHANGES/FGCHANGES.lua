@@ -44,13 +44,11 @@ local max_subt_width = (_screen.w-64) / font_zoom
 -- it's just what I found worked for this project's needs.   quietly-turning
 
 local doubleres = {
-   en=false,
-   sc=true,
-   tc=true,
+   ["zh-HANS"]=true,
+   ["zh-HANT"]=true,
    jp=true,
    th=true,
    ko=true,
-   ru=false,
 }
 -- -------------------------------------------------------------------------------
 
@@ -258,14 +256,14 @@ af[#af+1] = countdown_timer
 --      https://github.com/itgmania/itgmania/blob/159391b8a244cffdde9366b97e6a2d03f9cfb6b8/src/Font.cpp#L831
 
 local subtitle_actors = {
-   {characterSet="en", actor=en_subtitle_actor},
-   {characterSet="sc", actor=sc_subtitle_actor},
-   {characterSet="tc", actor=tc_subtitle_actor},
-   {characterSet="jp", actor=jp_subtitle_actor},
-   {characterSet="th", actor=th_bakedSubtitle_actor},
-   {characterSet="ko", actor=ko_subtitle_actor},
-   {characterSet="ru", actor=ru_subtitle_actor},
-   {characterSet="vn", actor=vn_subtitle_actor},
+   {file="en", actor=en_subtitle_actor},
+   {file="sc", actor=sc_subtitle_actor},
+   {file="tc", actor=tc_subtitle_actor},
+   {file="jp", actor=jp_subtitle_actor},
+   {file="th", actor=th_bakedSubtitle_actor},
+   {file="ko", actor=ko_subtitle_actor},
+   {file="ru", actor=ru_subtitle_actor},
+   {file="vn", actor=vn_subtitle_actor},
 }
 
 for subtitle_actor in ivalues(subtitle_actors) do
@@ -273,13 +271,13 @@ for subtitle_actor in ivalues(subtitle_actors) do
 
    subtitle_actor.actor.PlayCommand=function(self)
       -- if this is the BitmapText actor we want to use for subtitles, set it up!
-      if subtitle_choice.characterSet == subtitle_actor.characterSet then
+      if subtitle_choice.font == subtitle_actor.actor.File then
          subtitle_ref = self
 
          if subtitle_choice.bakedFile then
 
          else
-            self:zoom( doubleres[subtitle_actor.characterSet] and (font_zoom * 2) or font_zoom)
+            self:zoom( doubleres[subtitle_actor.file] and (font_zoom * 2) or font_zoom)
             self:wrapwidthpixels(max_subt_width)
          end
 
@@ -298,7 +296,7 @@ for subtitle_actor in ivalues(subtitle_actors) do
    end
 
    subtitle_actor.actor.SetTextCommand=function(self, params)
-      if subtitle_choice.characterSet == subtitle_actor.characterSet then
+      if subtitle_choice.font == subtitle_actor.actor.File then
          if subtitle_choice.bakedFile then
             self:setstate(params.frame-1):queuecommand("Show")
          else

@@ -154,44 +154,12 @@ for i,v in ipairs(subtitle_choices) do
    }
 
 
-   local choice_font_actor
-
-   if     v.characterSet == "en" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini" }
-
-   -- simplified chinese
-   elseif v.characterSet == "sc" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans SC 20px/_Noto Sans SC 20px.ini" }
-
-   -- traditional chinese
-   elseif v.characterSet == "tc" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans TC 20px/_Noto Sans TC 20px.ini" }
-
-   -- japanese
-   elseif v.characterSet == "jp" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini" }
-
-   -- korean
-   elseif v.characterSet == "ko" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans KR 20px/_Noto Sans KR 20px.ini" }
-
-   -- thai
-   elseif v.characterSet == "th" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" }
-
-   -- vietnamese
-   elseif v.characterSet == "vn" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans VN 40px/_Noto Sans VN 40px.ini" }
-
-   -- russian
-   elseif v.characterSet == "ru" then
-      choice_font_actor = Def.BitmapText{ File=base_path.."FGCHANGES/fonts/Noto Sans RU 40px/_Noto Sans RU 40px.ini" }
-   end
-
+   local choice_font_actor = Def.BitmapText{}
+   choice_font_actor.File = v.font
    choice_font_actor.Name = ("%s label"):format(v.file)
    choice_font_actor.Text = v.label
    choice_font_actor.InitCommand=function(self)
-      self:diffuse(0,0,0,1):zoom(doubleres[v.characterSet] and 1.2 or 0.6)
+      self:diffuse(0,0,0,1):zoom(doubleres[v.file] and 1.2 or 0.6)
       if (v.subLabel ~= nil) then
          self:y(-7)
       end

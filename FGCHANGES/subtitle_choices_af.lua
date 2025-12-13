@@ -53,18 +53,27 @@ local InputActions = {
          subtitle_choice = subtitle_choice%numCols
          if (subtitle_choice <= 0) then subtitle_choice=numCols end
       end
+   end,
+
+   Start = function()
+      MESSAGEMAN:Broadcast("SubtitleChosen")
    end
 }
 
 local function InputHandler( event )
-   if event.type ~= "InputEventType_FirstPress" then return end
-   if not InputActions[event.GameButton]        then return end
+   if not InputActions[event.GameButton] then return end
 
-   choices_refs[subtitle_choice]:playcommand("LoseFocus")
-   InputActions[event.GameButton]()
-   choices_refs[subtitle_choice]:playcommand("GainFocus")
-   cursor_sfx_ref:play()
-   cursor_triangle_ref:playcommand("Move")
+   if event.type == "InputEventType_Release" and event.GameButton == "Start" then
+      cursor_sfx_ref:play()
+      InputActions.Start()
+
+   elseif event.type == "InputEventType_FirstPress" then
+      choices_refs[subtitle_choice]:playcommand("LoseFocus")
+      InputActions[event.GameButton]()
+      choices_refs[subtitle_choice]:playcommand("GainFocus")
+      cursor_sfx_ref:play()
+      cursor_triangle_ref:playcommand("Move")
+   end
 end
 
 -- ------------------------------------------------------
@@ -186,6 +195,15 @@ for i,v in ipairs(subtitle_choices) do
 
    choices_af[#choices_af+1] = choice_af
 end
+
+choices_af[#choices_af+1] = Def.Quad{
+  InitCommand=function(self)
+    self:diffuse(0,0,0,0):zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+  end,
+  SubtitleChosenMessageCommand=function(self)
+    self:diffusealpha(0.75)
+  end
+}
 
 -- ------------------------------------------------------
 -- author's note:

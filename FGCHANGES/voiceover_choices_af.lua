@@ -17,6 +17,7 @@ local base_path = unpack(...)
 local cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local voiceover_choice = 1
+local voiceover_choices_af_has_focus = false
 
 local voiceover_choices = {
   { file="en-A",  label="English", subLabel="Voice Actor A", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
@@ -61,20 +62,26 @@ local InputActions = {
   --     end
   --  end,
 
-   Start = function()
-      MESSAGEMAN:Broadcast("VoiceOverChosen")
-   end
+  Select = function()
+    MESSAGEMAN:Broadcast("VoiceOverCanceled")
+  end,
+
+  -- Start = function()
+  --   MESSAGEMAN:Broadcast("VoiceOverChosen")
+  -- end
 }
 
 local function InputHandler( event )
-  if event.type ~= "InputEventType_FirstPress" then return end
-  if not InputActions[event.GameButton]        then return end
+  if not voiceover_choices_af_has_focus then return end
+  if not InputActions[event.GameButton] then return end
 
-  choices_refs[voiceover_choice]:playcommand("LoseFocus")
-  InputActions[event.GameButton]()
-  choices_refs[voiceover_choice]:playcommand("GainFocus")
-  cursor_sfx_ref:play()
-  cursor_triangle_ref:playcommand("Move")
+  if event.type == "InputEventType_FirstPress" then
+    choices_refs[voiceover_choice]:playcommand("LoseFocus")
+    InputActions[event.GameButton]()
+    choices_refs[voiceover_choice]:playcommand("GainFocus")
+    cursor_sfx_ref:play()
+    cursor_triangle_ref:playcommand("Move")
+  end
 end
 
 -- ------------------------------------------------------
@@ -84,8 +91,20 @@ local choices_af = Def.ActorFrame({})
 choices_af.InitCommand=function(self)
   self:y(af_y_offset)
 end
+choices_af.OnCommand=function()
+  SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
+end
 choices_af.HideSubtitleChoicesCommand=function(self)
   self:hibernate(math.huge)
+end
+choices_af.SubtitleChosenMessageCommand=function()
+  voiceover_choices_af_has_focus = true
+end
+choices_af.VoiceOverCanceledMessageCommand=function()
+  voiceover_choices_af_has_focus = false
+end
+choices_af.PlayCommand=function()
+  SCREENMAN:GetTopScreen():RemoveInputCallback( InputHandler )
 end
 
 -- ------------------------------------------------------
@@ -95,7 +114,7 @@ choices_af[#choices_af+1] = LoadActor("./sfx/cursor.ogg")..{
   HideCommand=function(self) self:hibernate(math.huge) end
 }
 
--- help-text instructing players to choose their subtitle language
+-- help-text instructing players to choose their voiceover language
 -- (XXX: would be better to have this display in the engine's current language)
 choices_af[#choices_af+1] = LoadActor("./img/choose-voiceover-language.png")..{
   InitCommand=function(self) self:xy(_screen.cx, instruction_y_offset_from_af):zoom(0.333):align(0.5, 1) end,
@@ -199,11 +218,15 @@ end
 
 choices_af[#choices_af+1] = Def.Quad{
   InitCommand=function(self)
-    self:diffuse(0,0,0,0.75):zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+    self:zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+    self:diffuse(0,0,0,0.75)
   end,
   SubtitleChosenMessageCommand=function(self)
     self:diffusealpha(0)
-  end
+  end,
+  VoiceOverCanceledMessageCommand=function(self)
+    self:diffuse(0,0,0,0.75)
+  end,
 }
 
 -- ------------------------------------------------------
@@ -212,4 +235,4 @@ local function GetVoiceOverChoice()
 end
 -- ------------------------------------------------------
 
-return {InputHandler, choices_af, GetVoiceOverChoice}
+return {choices_af, GetVoiceOverChoice}

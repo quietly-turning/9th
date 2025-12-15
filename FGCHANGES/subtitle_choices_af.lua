@@ -17,6 +17,7 @@ local base_path, subtitle_choices, doubleres = unpack(...)
 local cursor_sfx_ref, cursor_triangle_ref
 local choices_refs = {}
 local subtitle_choice = 1
+local subtitle_choices_af_has_focus = true
 
 -- ------------------------------------------------------
 
@@ -61,19 +62,16 @@ local InputActions = {
 }
 
 local function InputHandler( event )
-   if not InputActions[event.GameButton] then return end
+  if not subtitle_choices_af_has_focus  then return end
+  if not InputActions[event.GameButton] then return end
 
-   if event.type == "InputEventType_Release" and event.GameButton == "Start" then
-      cursor_sfx_ref:play()
-      InputActions.Start()
-
-   elseif event.type == "InputEventType_FirstPress" then
-      choices_refs[subtitle_choice]:playcommand("LoseFocus")
-      InputActions[event.GameButton]()
-      choices_refs[subtitle_choice]:playcommand("GainFocus")
-      cursor_sfx_ref:play()
-      cursor_triangle_ref:playcommand("Move")
-   end
+  if event.type == "InputEventType_FirstPress" then
+    choices_refs[subtitle_choice]:playcommand("LoseFocus")
+    InputActions[event.GameButton]()
+    choices_refs[subtitle_choice]:playcommand("GainFocus")
+    cursor_sfx_ref:play()
+    cursor_triangle_ref:playcommand("Move")
+  end
 end
 
 -- ------------------------------------------------------
@@ -83,8 +81,20 @@ local choices_af = Def.ActorFrame({})
 choices_af.InitCommand=function(self)
    self:y(af_y_offset)
 end
+choices_af.OnCommand=function()
+  SCREENMAN:GetTopScreen():AddInputCallback( InputHandler )
+end
 choices_af.HideSubtitleChoicesCommand=function(self)
    self:hibernate(math.huge)
+end
+choices_af.SubtitleChosenMessageCommand=function()
+  subtitle_choices_af_has_focus = false
+end
+choices_af.VoiceOverCanceledMessageCommand=function()
+  subtitle_choices_af_has_focus = true
+end
+choices_af.PlayCommand=function()
+  SCREENMAN:GetTopScreen():RemoveInputCallback( InputHandler )
 end
 
 -- ------------------------------------------------------
@@ -198,11 +208,15 @@ end
 
 choices_af[#choices_af+1] = Def.Quad{
   InitCommand=function(self)
-    self:diffuse(0,0,0,0):zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+    self:zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+    self:diffuse(0,0,0,0)
   end,
   SubtitleChosenMessageCommand=function(self)
     self:diffusealpha(0.75)
-  end
+  end,
+  VoiceOverCanceledMessageCommand=function(self)
+    self:diffuse(0,0,0,0)
+  end,
 }
 
 -- ------------------------------------------------------
@@ -220,4 +234,4 @@ end
 -- ------------------------------------------------------
 
 
-return {InputHandler, choices_af, GetSubtitleChoice}
+return {choices_af, GetSubtitleChoice}

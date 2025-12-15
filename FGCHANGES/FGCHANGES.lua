@@ -93,8 +93,8 @@ local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/_
 -- ------------------------------------------------------
 local subtitle_choice
 local subtitle_choices = LoadActor("./subtitle_choices.lua")
-local SubtitleChoiceInputHandler,  subtitle_choices_af,  GetSubtitleChoice  = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
-local VoiceOverChoiceInputHandler, voiceover_choices_af, GetVoiceOverChoice = unpack(LoadActor("./voiceover_choices_af.lua", {base_path}))
+local subtitle_choices_af,  GetSubtitleChoice  = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
+local voiceover_choices_af, GetVoiceOverChoice = unpack(LoadActor("./voiceover_choices_af.lua", {base_path}))
 
 -- ------------------------------------------------------
 local timer_done = false
@@ -192,17 +192,7 @@ end
 local af = Def.ActorFrame{}
 
 af.OnCommand=function(self)
-   SCREENMAN:GetTopScreen():AddInputCallback( SubtitleChoiceInputHandler )
    self:queuecommand("StartUpdate")
-end
-
-af.SubtitleChosenMessageCommand=function(self)
-   SCREENMAN:GetTopScreen():RemoveInputCallback( SubtitleChoiceInputHandler )
-   SCREENMAN:GetTopScreen():AddInputCallback( VoiceOverChoiceInputHandler )
-end
-
-af.VoiceOverChosenMessageCommand=function(self)
-   SCREENMAN:GetTopScreen():RemoveInputCallback( VoiceOverChoiceInputHandler )
 end
 
 af.HideUICommand=function(self)
@@ -217,9 +207,6 @@ end
 af.PlayCommand=function(self)
    time_at_start = GetTimeSinceStart()
    audio_ref:play()
-
-   SCREENMAN:GetTopScreen():RemoveInputCallback( SubtitleChoiceInputHandler )
-   SCREENMAN:GetTopScreen():RemoveInputCallback( VoiceOverChoiceInputHandler )
 end
 
 -- ------------------------------------------------------

@@ -47,7 +47,10 @@
 #BGCHANGES:0.000=BGCHANGES/black.png=1.000=0=0=0=StretchNoLoop====,
 99999=-nosongbg-=1.000=0=0=0 // don't automatically add -songbackground-
 ;
-#FGCHANGES:0.000=./FGCHANGES/FGCHANGES.lua=1.000=0=0=0=StretchNoLoop====,
+#FGCHANGES:
+0.000=./FGCHANGES/FGCHANGES.lua=1.000=0=0=0=StretchNoLoop====,
+0.100=./FGCHANGES/scripts/HideCombo.lua=1.000=0=0=0=StretchNoLoop====,
+0.125=./FGCHANGES/scripts/HideJudgment.lua=1.000=0=0=0=StretchNoLoop====,
 ;
 #KEYSOUNDS:;
 #ATTACKS:

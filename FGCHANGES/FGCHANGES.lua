@@ -22,7 +22,7 @@ local max_subt_width = (_screen.w-64) / font_zoom
 -- I ended up needing to use a mixture of "doubleres" fonts and non-doubleres-fonts
 -- in this project.  bitmap fonts in stepmania need a "pixel width" per-character.
 -- for example, in "_Noto Sans 40px.ini", I need to specify that "E" is 17px wide
--- while "l" is 6px wide, so stepmania knows how to draw text.
+-- while "l" is 6px wide, so stepmania knows how and *where* to draw text.
 --
 -- when you add "(doubleres)" to your filename, stepmania's RageBitmapTexture.cpp code
 -- will *effectively* draw the asset at half-the-size-with-twice-the-detail,

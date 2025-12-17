@@ -1,3 +1,6 @@
 .DS_STORE
 *.afphoto
 9th.ogg
+*.sm
+*.sm.old
+*.ssc.old

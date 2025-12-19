@@ -8,16 +8,16 @@
 #GENRE:Symphony;
 #ORIGIN:;
 #CREDIT:quietly-turning;
-#BANNER:_bn - Beethoven Symphony No. 9.png;
-#BACKGROUND:BGCHANGES/black.png;
+#BANNER:normal-stepchart-assets/_bn - Beethoven Symphony No. 9.png;
+#BACKGROUND:normal-stepchart-assets/black.png;
 #PREVIEWVID:;
-#JACKET:_bn - Beethoven Symphony No. 9.png;
+#JACKET:normal-stepchart-assets/_bn - Beethoven Symphony No. 9.png;
 #CDIMAGE:;
 #DISCIMAGE:;
 #LYRICSPATH:;
 #CDTITLE:;
-#MUSIC:_preview - Beethoven Symphony No. 9.ogg;
-#PREVIEW:_preview - Beethoven Symphony No. 9.ogg;
+#MUSIC:normal-stepchart-assets/_preview - Beethoven Symphony No. 9.ogg;
+#PREVIEW:normal-stepchart-assets/_preview - Beethoven Symphony No. 9.ogg;
 #OFFSET:0.000000;
 #SAMPLESTART:0.000000;
 #SAMPLELENGTH:38.000000;
@@ -44,7 +44,8 @@
 #FAKES:;
 #LABELS:0.000=Song Start;
 #LASTSECONDHINT:209.000000;
-#BGCHANGES:0.000=BGCHANGES/black.png=1.000=0=0=0=StretchNoLoop====,
+#BGCHANGES:
+0.000=BGCHANGES/black.png=1.000=0=0=0=StretchNoLoop====,
 99999=-nosongbg-=1.000=0=0=0 // don't automatically add -songbackground-
 ;
 #FGCHANGES:
@@ -53,8 +54,7 @@
 0.125=./FGCHANGES/scripts/HideJudgment.lua=1.000=0=0=0=StretchNoLoop====,
 ;
 #KEYSOUNDS:;
-#ATTACKS:
-;
+#ATTACKS:;
 
 //---------------dance-single - ----------------
 #NOTEDATA:;
@@ -64,7 +64,7 @@
 #CHARTSTYLE:;
 #DIFFICULTY:Challenge;
 #METER:10;
-#MUSIC:silence.ogg;
+#MUSIC:normal-stepchart-assets/silence.ogg;
 #RADARVALUES:0.386876,0.749522,0.186603,0.607656,0.523923,566.000000,527.000000,39.000000,127.000000,5.000000,2.000000,4.000000,0.000000,0.000000,0.386876,0.749522,0.186603,0.607656,0.523923,566.000000,527.000000,39.000000,127.000000,5.000000,2.000000,4.000000,0.000000,0.000000;
 #CREDIT:quietly-turning;
 #NOTES:

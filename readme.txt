@@ -31,12 +31,12 @@ accessible place.
 
 It's frustrating that Tech™ doesn't seem motivated by this sentiment.
 The tickets I work on are never about accessibility, but I carve out
-time include it in every pull request I submit regardless.  My employer
-put out an internal request for employees to write blogposts the company
-could share to shape SEO and drive sales (and whatever myriad reasons
-companies blog in 2025), and I wrote about how I've worked accessibility
-into our software, and curiously they opted not to share that one on our
-company website.
+time to include it in every pull request I submit regardless.  My
+employer put out an internal request for employees to write blogposts
+the company could share to shape SEO and drive sales (and whatever
+myriad reasons companies blog in 2025), and I wrote about how I've
+worked accessibility into our software, and curiously they opted not to
+share that one on our company website.
 
 Back in uni, one of my classmates was blind, and brought his seeing-eye
 dog to class.  He expressed frustration that the Windows 8 calculator
@@ -67,7 +67,7 @@ writer.  Her letter stirred my heart.
 
 I first had the idea for this stepchart then, in 2015, almost exactly as
 it appears today — players hitting notes to an excerpt of Beethoven's
-9th Symphony they cannot hear as a voice actor read Ms. Keller's letter.
+9th Symphony they cannot hear as a voice actor reads Ms. Keller's letter.
 My interest then was strictly emotional; some men just want to watch the
 world yearn.
 
@@ -194,7 +194,7 @@ This was very tedious and painstaking!
 I also learned that as of 2025, StepMania/ITGmania's in-game font
 rendering does not support certain diacritic-heavy fonts like Thai
 script, where the alphabet characters and the diacritic characters are
-separate unicode codepoints, and it's up the font renderer to
+separate unicode codepoints, and it's up to the font renderer to
 superimpose the diacritic gylphs atop the alphabet glyphs!  I sure did
 spend a lot of time going down a rabbit hole 1. figuring that out, and
 2. trying to get a hacky solution working with negative pixel values for

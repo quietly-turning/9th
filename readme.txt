@@ -22,7 +22,7 @@ be.
 
 ## A little about me
 
-Since 2020, I've been employed as a software developer.  My favorite
+Since 2021, I've been employed as a software developer.  My favorite
 area to work in application development is accessibility — keyboard
 navigation, touch navigation, color and contrast considerations, screen
 readers, and so on.  I love using my time on this earth to move the
@@ -45,7 +45,9 @@ use, and used a particular class project to demonstrate to us how he was
 using screen-reader software to write code to create a
 screen-reader-accessible calculator app.
 
-That stays with me, and motivates me today to improve what I can.
+I was struck as much by the current state of software inaccessibility as
+I was by his tenacity to improve it.  It stays with me, and motivates me
+today to improve what I can.
 
 
 
@@ -167,7 +169,7 @@ Jon Batiste tactfully hints at this in an NPR interview:
 https://youtu.be/5_oZa5200II?t=376
 
 I think it's fine to like songs like Beethoven's 9th Symphony, but that
-it's important — *especially* if you the reader are a relatively
+it's important — *especially* if you-the-reader are a relatively
 well-off white man — to acknowledge it's not the definition of good
 music, and that you owe it to yourself as a citizen of the broader world
 to seek out new music you're unfamiliar with.
@@ -186,7 +188,8 @@ All of the fonts in FGCHANGES/fonts were manually created by me using:
   * Affinity Photo 2 to arrange a grid of characters and export to png
   * a text editor to create the ini file and manually type in each
     character width
-  * Affinity Photo 2's ruler tool to manually measure each character's width
+  * Affinity Photo 2's ruler tool to manually measure each character's
+    width
 
 This was very tedious and painstaking!
 

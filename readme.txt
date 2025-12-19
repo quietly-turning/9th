@@ -60,10 +60,10 @@ That blog post is archived here; I recommend reading it in full!
 https://web.archive.org/web/20140330221339/http://www.lettersofnote.com/2014/03/my-heart-almost-stood-still.html
 
 I was immediately struck by the letter's evocative, poetic language.
-The way she described the play-by-play of listening to symphony, I felt
-as though I were listening alongside her.  I'd known of Ms. Keller from
-elementary school history, but had no idea she was such an incredible
-writer.  Her letter stirred my heart.
+The way she described the play-by-play of listening to the symphony, I
+felt as though I were listening alongside her.  I'd known of Ms. Keller
+from elementary school history, but had no idea she was such an
+incredible writer.  Her letter stirred my heart.
 
 I first had the idea for this stepchart then, in 2015, almost exactly as
 it appears today — players hitting notes to an excerpt of Beethoven's

@@ -1,4 +1,4 @@
-Symphony No. 9
+# Symphony No. 9
 
 A stepchart to excerpts from Beethoven's 9th Symphony, in which the
 player cannot hear the music, but creates sonic vibrations with their
@@ -20,7 +20,7 @@ be.
 
 
 
-# A little about me
+## A little about me
 
 Since 2020, I've been employed as a software developer.  My favorite
 area to work in application development is accessibility — keyboard
@@ -51,7 +51,7 @@ That stays with me, and motivates me today to improve what I can.
 
 
 
-# About Ms. Keller's Letter
+## About Ms. Keller's Letter
 
 I first came across Ms. Keller's 1924 letter to her local NYC radio
 station about their performance of Beethoven's 9th Symphony in 2015,
@@ -102,7 +102,7 @@ decade earlier — and to get my audience thinking about accessibility.
 
 
 
-# About Accessibility in Software
+## About Accessibility in Software
 
 Inclusivity is the right thing to do, and it can be designed for.
 
@@ -126,7 +126,7 @@ https://www.youtube.com/watch?v=PWJhxsZb81U&t=746s
 
 
 
-# About Beethoven's 9th Symphony
+## About Beethoven's 9th Symphony
 
 I grew up listening to a lot of classical music.  The 2nd movement of
 Beethoven's 9th got regular play in my Winamp install in early 2000s,
@@ -153,9 +153,7 @@ includes short excerpts from the 1st, 2nd, and 4th movements.  Give it a
 listen!
 
 If you want, you could even edit the ssc file's #MUSIC tag for the
-challenge stepchart to be
-  #MUSIC:normal-stepchart-assets/9th.ogg;
-and that should work.
+challenge stepchart to be `#MUSIC:normal-stepchart-assets/9th.ogg;` and that should work.
 
 Finally, it sucks that some people have appropriated Beethoven's works
 and other classical pieces for racist ideologies.  I'd be remiss not to
@@ -165,7 +163,7 @@ Adam Neely has a good video essay on this topic:
 https://youtu.be/Kr3quGh7pJA?t=1329
 
 Jon Batiste tactfully hints at this in an NPR interview:
-https://youtu.be/5_oZa5200II?si=eCYCSHRnVRsMhnJ3&t=376
+https://youtu.be/5_oZa5200II?t=376
 
 I think it's fine to like songs like Beethoven's 9th Symphony, but that
 it's important — *especially* if you the reader are a relatively
@@ -177,7 +175,7 @@ to seek out new music you're unfamiliar with.
 
 
 
-# Technical Implementation Notes
+## Technical Implementation Notes
 
 This stepchart was a lot of manual work!  I come away with a much
 greater appreciation for what limited tooling exists for content
@@ -212,10 +210,10 @@ player-specific notefield.  Ah well.
 Another planned feature was including a Latin American Spanish voice
 actor, but I ran out of money.
 
-en-A's voice actor is Juliet Stevenson
+* en-A's voice actor is Juliet Stevenson
    from the "Letters of Note: Music" audiobook
-en-B's voice actor is anonymous
-jp's voice actor is Machiko Ejiri
+* en-B's voice actor is anonymous
+* jp's voice actor is Machiko Ejiri
    https://www.voices.com/profile/machikoejiri
 
 

@@ -8,11 +8,11 @@ radio a hundred years ago.
 I had two goals in mind while making this stepchart:
   1. to acknowledge the position + influence I have as a dance game
      community leader and use it to get my audience thinking about
-     accessibility 
+     accessibility
   2. to share something beautiful with the world
 
 With this readme.txt, I'd like to provide some background on the
-material, explain my interest in it, briefly touch on a technical
+material, explain my interest in it, briefly touch on technical
 implementation details, and note my hopes for what this stepchart can
 be.
 
@@ -154,7 +154,7 @@ listen!
 
 If you want, you could even edit the ssc file's #MUSIC tag for the
 challenge stepchart to be
-  #MUSIC:normal-stepchart-assets/9th.ogg; 
+  #MUSIC:normal-stepchart-assets/9th.ogg;
 and that should work.
 
 Finally, it sucks that some people have appropriated Beethoven's works
@@ -193,14 +193,14 @@ This was very tedious and painstaking!
 
 I also learned that as of 2025, StepMania/ITGmania's in-game font
 rendering does not support certain diacritic-heavy fonts like Thai
-script, where the alphabet characters and the diacritic charaters are
+script, where the alphabet characters and the diacritic characters are
 separate unicode codepoints, and it's up the font renderer to
 superimpose the diacritic gylphs atop the alphabet glyphs!  I sure did
 spend a lot of time going down a rabbit hole 1. figuring that out, and
 2. trying to get a hacky solution working with negative pixel values for
-diacritc widths in Thai.ini...
+diacritic widths in Thai.ini...
 
-Ultimately, to support Thai in this stepchart, I baked laid out entire
+Ultimately, to support Thai in this stepchart, I laid out entire
 sentences as frames of a large spritesheet and wrote a secondary system
 to cycle through that.  It'd be great if StepMania/ITGmania properly
 supports scripts like Thai in the future. 👍
@@ -219,15 +219,21 @@ jp's voice actor is Machiko Ejiri
    https://www.voices.com/profile/machikoejiri
 
 
-One regret I have with this stepchart is how very-over-the-dealine my
-work on it ran.  As I submit it, it's not yet clear if the LEFTS TO will
-include this in LEFTS1 or wait until LEFTS2.
+One small regret I have with this stepchart is not making time to clean
+up my code into something sensible before shipping it.  It's a mess.
+I'd hoped to leave myself a day the end to review my code, break it into
+modules, author helpful comments throughout, ... and none of that
+happened.  D:
+
+One larger regret I have is how very-over-the-deadline my work on it ran.
+As I submit it, it's not yet clear if the TO will include this in LEFTS1
+or wait until LEFTS2.
 
 On my end, even knowing I was a full week past the LEFTS1 deadline, I
 wanted to finish it now, while it was still in my brain.  I didn't want
 the spectre of this unfinished project hanging over me for a year.
 
-In all, I'm happy with it, and hope you enjoy it.  
+In all, I'm happy with it, and hope you enjoy it.
 I hope it causes you to learn something new about accessibility.
 I hope you yearn.
 

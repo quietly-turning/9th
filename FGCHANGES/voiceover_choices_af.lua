@@ -22,7 +22,7 @@ local voiceover_choices_af_has_focus = false
 local voiceover_choices = {
   { file="en-A",  label="English", subLabel="Voice Actor A", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
   { file="en-B",  label="English", subLabel="Voice Actor B", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
-  { file="jp",    label="日本語",                            doubleres=true,  font=("%sFGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini"):format(base_path)},
+  { file="jp",    label="日本語",                             doubleres=true,  font=("%sFGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini"):format(base_path)},
 }
 
 -- ------------------------------------------------------
@@ -40,35 +40,10 @@ local InputActions = {
     if (voiceover_choice>#voiceover_choices) then voiceover_choice=1 end
   end,
 
-  --  -- decrement by numCols, wrap-and-maintain-column if needed
-  --  MenuUp = function()
-  --     voiceover_choice = voiceover_choice - numCols
-  --     if (voiceover_choice <= 0) then
-  --        if (voiceover_choice%numCols > #voiceover_choices%numCols) then
-  --           voiceover_choice = math.floor(#voiceover_choices/numCols)*numCols + voiceover_choice
-  --        else
-  --           voiceover_choice = math.ceil(#voiceover_choices/numCols)*numCols + voiceover_choice
-  --           if (voiceover_choice>#voiceover_choices) then voiceover_choice=math.floor(#voiceover_choices/numCols)*numCols end
-  --        end
-  --     end
-  --  end,
-
-  --  -- increment by numCols, wrap-and-maintain-column if needed
-  --  MenuDown = function()
-  --     voiceover_choice = voiceover_choice + numCols
-  --     if (voiceover_choice>#voiceover_choices) then
-  --        voiceover_choice = voiceover_choice%numCols
-  --        if (voiceover_choice <= 0) then voiceover_choice=numCols end
-  --     end
-  --  end,
-
+  -- move focus back to subtitle-choosing
   Select = function()
     MESSAGEMAN:Broadcast("VoiceOverCanceled")
   end,
-
-  -- Start = function()
-  --   MESSAGEMAN:Broadcast("VoiceOverChosen")
-  -- end
 }
 
 local function InputHandler( event )

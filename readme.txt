@@ -78,9 +78,8 @@ folks — topics which sadly remain contentious in 2025.
 
 Her 1932 letter responding to a question asking what she saw from the
 top of the Empire State Building bears resemblance to her 9th Symphony
-letter in poetic tone, but comes out more strongly in defense of herself
-as an advocate for anyone who would question, or discredit, disabled
-folks.
+letter in poetic tone, but comes across more strongly as standing up to
+anyone attempting to question, or discredit, disabled folks.
 https://web.archive.org/web/20140703153026/http://www.lettersofnote.com/2012/03/empire-state-building.html
 
 I can't speak for Ms. Keller, but I choose to believe she wrote letters
@@ -88,8 +87,8 @@ like these both because she enjoyed her craft and was good at it — the
 delight in choosing precisely the right word to elicit or ignite a
 feeling in a reader! — and because she recognized the position she was
 in as a public figure the public paid attention to.  She surely knew she
-could move the needle in a little bit of a better direction if she stood
-up for what she believed in.
+could move the needle in a little bit better a direction if she stood up
+for what she believed in.
 
 That's what I see and feel in her writing.
 
@@ -196,9 +195,10 @@ rendering does not support certain diacritic-heavy fonts like Thai
 script, where the alphabet characters and the diacritic characters are
 separate unicode codepoints, and it's up to the font renderer to
 superimpose the diacritic gylphs atop the alphabet glyphs!  I sure did
-spend a lot of time going down a rabbit hole 1. figuring that out, and
+spend a lot of time going down a rabbit hole
+1. figuring that out, and
 2. trying to get a hacky solution working with negative pixel values for
-diacritic widths in Thai.ini...
+   diacritic widths in Thai.ini...
 
 Ultimately, to support Thai in this stepchart, I laid out entire
 sentences as frames of a large spritesheet and wrote a secondary system
@@ -230,7 +230,7 @@ As I submit it, it's not yet clear if the TO will include this in LEFTS1
 or wait until LEFTS2.
 
 On my end, even knowing I was a full week past the LEFTS1 deadline, I
-wanted to finish it now, while it was still in my brain.  I didn't want
+wanted to finish it now, while it was still in my brain.  I didn't need
 the spectre of this unfinished project hanging over me for a year.
 
 In all, I'm happy with it, and hope you enjoy it.

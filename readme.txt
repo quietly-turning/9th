@@ -118,7 +118,7 @@ design and build experiences for them.
 
 TLoU Part 2's accessibility options are a fantastic example of designing
 for accessibility, and (in my opinion) represent the current State Of
-The Art. This is genuinely inspiring stuff I think you should check out:
+The Art. This is genuinely inspiring stuff I think you should check out:  
 https://www.youtube.com/watch?v=PWJhxsZb81U&t=746s
 
 
@@ -153,16 +153,18 @@ includes short excerpts from the 1st, 2nd, and 4th movements.  Give it a
 listen!
 
 If you want, you could even edit the ssc file's #MUSIC tag for the
-challenge stepchart to be `#MUSIC:normal-stepchart-assets/9th.ogg;` and that should work.
+challenge stepchart to be 
+  #MUSIC:normal-stepchart-assets/9th.ogg;
+and that should work.
 
 Finally, it sucks that some people have appropriated Beethoven's works
 and other classical pieces for racist ideologies.  I'd be remiss not to
 address it here.
 
-Adam Neely has a good video essay on this topic:
+Adam Neely has a good video essay on this topic:  
 https://youtu.be/Kr3quGh7pJA?t=1329
 
-Jon Batiste tactfully hints at this in an NPR interview:
+Jon Batiste tactfully hints at this in an NPR interview:  
 https://youtu.be/5_oZa5200II?t=376
 
 I think it's fine to like songs like Beethoven's 9th Symphony, but that
@@ -210,10 +212,10 @@ player-specific notefield.  Ah well.
 Another planned feature was including a Latin American Spanish voice
 actor, but I ran out of money.
 
-* en-A's voice actor is Juliet Stevenson
+* en-A's voice actor is Juliet Stevenson  
    from the "Letters of Note: Music" audiobook
 * en-B's voice actor is anonymous
-* jp's voice actor is Machiko Ejiri
+* jp's voice actor is Machiko Ejiri  
    https://www.voices.com/profile/machikoejiri
 
 
@@ -235,5 +237,5 @@ In all, I'm happy with it, and hope you enjoy it.
 I hope it causes you to learn something new about accessibility.
 I hope you yearn.
 
-quietly-turning
+quietly-turning  
 18 December 2025

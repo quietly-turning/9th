@@ -1,4 +1,5 @@
 -- ------------------------------------------------------
+local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
 
 -- subtitle_path and audio_path will be set when countdown timer ends,
 -- signifying players have made their choices
@@ -6,6 +7,28 @@ local audio_path, subtitle_path
 
 local font_zoom      = 0.6
 local max_subt_width = (_screen.w-64) / font_zoom
+
+-- this stepchart experience was initially designed around a single voiceover asset
+-- now referred to as "en-A", which happened to be 3 minutes and 20 seconds long.
+-- other voiceover files ended up being different lengths, so we need to scale the
+-- overall stepchart duration up and down to accommodate, using SongOptions:MusicRate()
+-- I handle this in the main ActorFrame's PlayCommand
+local base_audio_duration = (60*3) + 20
+
+local audio_choices = {
+   ["en-A"] = {
+      path = ("%sFGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"):format(base_path),
+      length = ((60*3)+20)
+   },
+   ["en-B"] = {
+      path = ("%sFGCHANGES/media/audio/en-B.my-heart-almost-stood-still.ogg"):format(base_path),
+      length = (60*3)
+   },
+   jp = {
+      path = ("%sFGCHANGES/media/audio/jp.my-heart-almost-stood-still.ogg"):format(base_path),
+      length = ((60*2)+55)
+   }
+}
 
 -- -------------------------------------------------------------------------------
 -- A RANT ABOUT USING THE "(doubleres)" TEXTURE HINT IN FONTS
@@ -42,8 +65,6 @@ local doubleres = {
    ko=true,
 }
 -- -------------------------------------------------------------------------------
-
-local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
 
 -- get parser helper function
 local ParseFile = dofile(base_path.."FGCHANGES/scripts/subtitle-parsers/srt-parser.lua")
@@ -116,7 +137,7 @@ local UpdateCountdownTimer = function(af)
 
       LoadSubtitleFile( audioFilename, subtitleFilename )
 
-      audio_path = ("%sFGCHANGES/media/audio/%s.my-heart-almost-stood-still.ogg"):format(base_path, audioFilename)
+      audio_path = audio_choices[audioFilename].path
       audio_ref:playcommand("LoadFile")
 
       countdown_ref:visible(false)
@@ -201,9 +222,18 @@ af.StartUpdateCommand=function(self)
    self:SetUpdateFunction( Update )
 end
 
+-- -----------------------------------------------
+-- player has made subtitle and voiceover choices
+-- voiceover file has been loaded
+-- unneeded BitmapText actors for subtitles-not-chosen have been hibernated
+-- begin the stepchart experience proper
+
 af.PlayCommand=function(self)
    time_at_start = GetTimeSinceStart()
    audio_ref:play()
+
+   local new_musicrate = base_audio_duration / audio_choices[voiceover_choice.file].length
+   GAMESTATE:GetSongOptionsObject("ModsLevel_Song"):MusicRate( new_musicrate )
 end
 
 -- ------------------------------------------------------

@@ -1,8 +1,6 @@
 -- ------------------------------------------------------
--- load helpers
 
 local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
-local helpers = dofile(base_path.."FGCHANGES/scripts/Helpers.lua")
 
 -- ------------------------------------------------------
 
@@ -195,10 +193,6 @@ af.OnCommand=function(self)
    self:queuecommand("StartUpdate")
 end
 
-af.HideUICommand=function(self)
-   helpers.HideUI()
-end
-
 af.StartUpdateCommand=function(self)
    time_at_start = GetTimeSinceStart()
    self:SetUpdateFunction( Update )
@@ -222,10 +216,6 @@ af[#af+1] = Def.Quad{
    OnCommand=function(self)
       -- fade Quad in, covering the UI, giving an appearance of fading to black
       self:smooth(0.333):diffusealpha(1)
-      self:queuecommand("Next")
-   end,
-   NextCommand=function(self)
-      self:GetParent():queuecommand("HideUI")
    end,
    HideQuadCommand=function(self)
       self:smooth(1):diffusealpha(0)

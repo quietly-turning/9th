@@ -52,6 +52,7 @@
 0.000=./FGCHANGES/FGCHANGES.lua=1.000=0=0=0=StretchNoLoop====,
 0.100=./FGCHANGES/scripts/HideCombo.lua=1.000=0=0=0=StretchNoLoop====,
 0.125=./FGCHANGES/scripts/HideJudgment.lua=1.000=0=0=0=StretchNoLoop====,
+2.000=./FGCHANGES/scripts/HideThemeUI.lua=1.000=0=0=0=StretchNoLoop====,
 ;
 #KEYSOUNDS:;
 #ATTACKS:;

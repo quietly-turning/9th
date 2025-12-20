@@ -293,8 +293,8 @@ end
 
 local subtitle_actors = {
    {file="en", actor=en_subtitle_actor},
-   {file="sc", actor=sc_subtitle_actor},
-   {file="tc", actor=tc_subtitle_actor},
+   {file="zh-HANS", actor=sc_subtitle_actor},
+   {file="zh-HANT", actor=tc_subtitle_actor},
    {file="jp", actor=jp_subtitle_actor},
    {file="th", actor=th_bakedSubtitle_actor},
    {file="ko", actor=ko_subtitle_actor},

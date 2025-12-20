@@ -1,3 +1,7 @@
+-- ------------------------------------------------------
+-- helper function for detecting if the player is in edit mode
+-- returns true or false
+
 local function IsEditMode()
    local screen = SCREENMAN:GetTopScreen()
     if not screen then
@@ -7,6 +11,8 @@ local function IsEditMode()
 
    return (THEME:GetMetric(screen:GetName(), "Class") == "ScreenEdit")
 end
+
+-- ------------------------------------------------------
 
 local function HideCombo(player)
   local screen = SCREENMAN:GetTopScreen()

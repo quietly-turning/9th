@@ -1,15 +1,7 @@
 -- ------------------------------------------------------
 
-local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
-
--- ------------------------------------------------------
-
-local subtitle_color        = {1,1,1,1} -- white text by default
-
 -- subtitle_path and audio_path will be set when countdown timer ends, signifying players have made their choices
 local audio_path, subtitle_path
-
--- -------------------------------------------------------------------------------
 
 local font_zoom      = 0.6
 local max_subt_width = (_screen.w-64) / font_zoom
@@ -50,8 +42,7 @@ local doubleres = {
 }
 -- -------------------------------------------------------------------------------
 
-
--- ------------------------------------------------------
+local base_path = GAMESTATE:GetCurrentSong():GetSongDir()
 
 -- get parser helper function
 local ParseFile = dofile(base_path.."FGCHANGES/scripts/subtitle-parsers/srt-parser.lua")
@@ -85,7 +76,11 @@ local vn_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 -- as of November 2025, ITGm's Font.cpp doesn't appear to support superimposing diacritics over alphabet characters,
 -- leaving written languages like Thai script unable to render in a BitmapText.  for now, recourse is to support
 -- entire lines of subtitles baked into sprite frames
+
+-- the actor representing the choice of Thai subtitles *can* be rendered using a BitmapText,
+-- because "ภาษาไทย" happens to contain no diacritic codepoints
 local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto Sans Thai 20px/_Noto Sans Thai 20px.ini" })
+-- the Thai subtitles themselves are a 3x10 grid of sentences in a giant png file
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/_prebaked/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
@@ -95,14 +90,14 @@ local subtitle_choices_af,  GetSubtitleChoice  = unpack(LoadActor("./subtitle_ch
 local voiceover_choices_af, GetVoiceOverChoice = unpack(LoadActor("./voiceover_choices_af.lua", {base_path}))
 
 -- ------------------------------------------------------
-local timer_done = false
-local timer_start_seconds = 10
+local countdown_timer_done = false
+local countdown_timer_start_seconds = 10
 
-local UpdateTimer = function(af)
-   if type(time_at_start)~="number" then return false end
+local UpdateCountdownTimer = function(af)
+   if (type(time_at_start) ~= "number") then return false end
 
    local time = GetTimeSinceStart() - time_at_start
-   local timer_text = math.round(timer_start_seconds - time)
+   local timer_text = math.ceil(countdown_timer_start_seconds - time)
 
    -- time still remaining on countdown timer; update it
    if (timer_text > 0) then
@@ -120,7 +115,7 @@ local UpdateTimer = function(af)
 
       LoadSubtitleFile( audioFilename, subtitleFilename )
 
-      audio_path    = ("%sFGCHANGES/media/audio/%s.my-heart-almost-stood-still.ogg"):format(base_path, audioFilename)
+      audio_path = ("%sFGCHANGES/media/audio/%s.my-heart-almost-stood-still.ogg"):format(base_path, audioFilename)
       audio_ref:playcommand("LoadFile")
 
       countdown_ref:visible(false)
@@ -130,7 +125,7 @@ local UpdateTimer = function(af)
 
       af:playcommand("Play")
       af:playcommand("HideQuad")
-      timer_done = true
+      countdown_timer_done = true
    end
 end
 
@@ -178,8 +173,8 @@ end
 -- ------------------------------------------------------
 
 local Update = function(af)
-   if (not timer_done) then
-      UpdateTimer(af)
+   if (not countdown_timer_done) then
+      UpdateCountdownTimer(af)
    else
       UpdateSubtitles(af)
    end
@@ -237,12 +232,14 @@ local countdown_timer = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto S
 countdown_timer.InitCommand=function(self)
    countdown_ref = self
    self:halign(1):valign(0):xy(_screen.w-32, 10):diffuse(0.7,0.7,0.7,1)
-   self:settext(timer_start_seconds)
+   self:settext(countdown_timer_start_seconds)
 end
 
 af[#af+1] = countdown_timer
 
 -- ------------------------------------------------------
+-- add BitmapText actors to display subtitles during gameplay
+--
 -- XXX: create one unique BitmapText actor per-glyph-set needed. :(
 --
 --      it doesn't seem possible to create a single "import" font from within a stepchart
@@ -268,6 +265,8 @@ local subtitle_actors = {
    {file="ru", actor=ru_subtitle_actor},
    {file="vn", actor=vn_subtitle_actor},
 }
+
+local subtitle_color = {1,1,1,1} -- white subtitle text
 
 for subtitle_actor in ivalues(subtitle_actors) do
    subtitle_actor.actor.InitCommand=function(self) self:animate(false) end

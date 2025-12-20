@@ -85,7 +85,7 @@ local th_subtitle_actor = Def.BitmapText({ File=base_path.."FGCHANGES/fonts/Noto
 local th_bakedSubtitle_actor = LoadActor(base_path.."FGCHANGES/media/subtitles/_prebaked/th/thai-subtitles 3x10 (doubleres).png")
 
 -- ------------------------------------------------------
-local subtitle_choice
+local subtitle_choice, voiceover_choice
 local subtitle_choices = LoadActor("./subtitle_choices.lua")
 local subtitle_choices_af,  GetSubtitleChoice  = unpack(LoadActor("./subtitle_choices_af.lua", {base_path, subtitle_choices, doubleres}))
 local voiceover_choices_af, GetVoiceOverChoice = unpack(LoadActor("./voiceover_choices_af.lua", {base_path}))

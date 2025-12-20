@@ -273,8 +273,6 @@ countdown_timer.InitCommand=function(self)
    self:settext(countdown_timer_start_seconds)
 end
 
-af[#af+1] = countdown_timer
-
 -- ------------------------------------------------------
 -- add BitmapText actors to display subtitles during gameplay
 --
@@ -354,5 +352,6 @@ end
 
 af[#af+1] = subtitle_choices_af
 af[#af+1] = voiceover_choices_af
+af[#af+1] = countdown_timer
 
 return af

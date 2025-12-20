@@ -1,6 +1,7 @@
 -- ------------------------------------------------------
 
--- subtitle_path and audio_path will be set when countdown timer ends, signifying players have made their choices
+-- subtitle_path and audio_path will be set when countdown timer ends,
+-- signifying players have made their choices
 local audio_path, subtitle_path
 
 local font_zoom      = 0.6
@@ -183,6 +184,13 @@ end
 -- ------------------------------------------------------
 
 local af = Def.ActorFrame{}
+
+af.InitCommand=function(self)
+   -- don't allow players to specify their own MusicRate for this stepchart
+   -- enforce 1.0 MusicRate
+   GAMESTATE:GetSongOptionsObject("ModsLevel_Song"):MusicRate(1)
+end
+
 
 af.OnCommand=function(self)
    self:queuecommand("StartUpdate")

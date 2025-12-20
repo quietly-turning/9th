@@ -43,29 +43,3 @@ helpers.HideUI = function()
       end
    end
 end
-
--- ------------------------------------------------------
--- Takes a string and generates a case insensitive Lua string pattern.
--- e.g. "ini" returns "[Ii][Nn][Ii]"
---
--- originally appeared in Simply Love/Scripts/SL-ChartParser.lua
-
-helpers.MixedCasePattern = function(str)
-	local t = {}
-	for c in str:gmatch(".") do
-		t[#t+1] = "[" .. c:upper() .. c:lower() .. "]"
-	end
-	return table.concat(t, "")
-end
-
--- ------------------------------------------------------
--- WideScale() is copied from Simply Love/Scripts/SL-Helpers.lua
--- Useful for writing one line of code that scales a number depending on the player's current theme aspect ratio.
--- This clamps the the scaled value to not exceed whatever is provided as AR16_9, which would otherwise happen
--- with, for example, ultrawide (21:9) monitors.
-
-helpers.WideScale = function(AR4_3, AR16_9)
-	return clamp(scale( SCREEN_WIDTH, 640, 854, AR4_3, AR16_9 ), AR4_3, AR16_9)
-end
-
-return helpers

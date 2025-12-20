@@ -2,10 +2,10 @@
 -- grid layout configuration
 -- okay to modify these to suit your needs!
 local numCols = 4
-local choiceWidth = 172
+local choiceWidth  = WideScale(150, 172)
 local choiceHeight = 60
 local choiceStroke = 4
-local choicePaddingX = 14
+local choicePaddingX = WideScale(5,14)
 local choicePaddingY = 18
 
 local af_y_offset = 100

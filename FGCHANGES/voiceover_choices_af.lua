@@ -193,7 +193,10 @@ end
 
 choices_af[#choices_af+1] = Def.Quad{
   InitCommand=function(self)
-    self:zoom(_screen.w, _screen.h):xy(_screen.cx, af_y_offset + instruction_y_offset_from_af - 20)
+    self:align(0, 0)
+    self:zoomtowidth(_screen.w)
+    self:zoomtoheight(_screen.h)
+    self:y(instruction_y_offset_from_af - 50)
     self:diffuse(0,0,0,0.75)
   end,
   SubtitleChosenMessageCommand=function(self)

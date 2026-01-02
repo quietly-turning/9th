@@ -20,9 +20,8 @@ local voiceover_choice = 1
 local voiceover_choices_af_has_focus = false
 
 local voiceover_choices = {
-  { file="en-A",  label="English", subLabel="Voice Actor A", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
-  { file="en-B",  label="English", subLabel="Voice Actor B", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
-  { file="jp",    label="日本語",                             doubleres=true,  font=("%sFGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini"):format(base_path)},
+  { file="en",  label="English", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
+  { file="jp",  label="日本語",   doubleres=true,  font=("%sFGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini"):format(base_path)},
 }
 
 -- ------------------------------------------------------

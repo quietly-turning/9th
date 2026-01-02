@@ -218,7 +218,6 @@ actor, but I ran out of money.
 
 * en-A's voice actor is Juliet Stevenson
    from the "Letters of Note: Music" audiobook
-* en-B's voice actor is anonymous
 * jp's voice actor is Machiko Ejiri
    https://www.voices.com/profile/machikoejiri
 

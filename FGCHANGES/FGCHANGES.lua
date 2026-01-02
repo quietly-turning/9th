@@ -9,20 +9,16 @@ local font_zoom      = 0.6
 local max_subt_width = (_screen.w-64) / font_zoom
 
 -- this stepchart experience was initially designed around a single voiceover asset
--- now referred to as "en-A", which happened to be 3 minutes and 20 seconds long.
+-- now referred to as "en", which happened to be 3 minutes and 20 seconds long.
 -- other voiceover files ended up being different lengths, so we need to scale the
 -- overall stepchart duration up and down to accommodate, using SongOptions:MusicRate()
 -- I handle this in the main ActorFrame's PlayCommand
 local base_audio_duration = (60*3) + 20
 
 local audio_choices = {
-   ["en-A"] = {
+   en = {
       path = ("%sFGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"):format(base_path),
       length = ((60*3)+20)
-   },
-   ["en-B"] = {
-      path = ("%sFGCHANGES/media/audio/en-B.my-heart-almost-stood-still.ogg"):format(base_path),
-      length = (60*3)
    },
    jp = {
       path = ("%sFGCHANGES/media/audio/jp.my-heart-almost-stood-still.ogg"):format(base_path),

@@ -1,7 +1,6 @@
 -- ------------------------------------------------------
 -- grid layout configuration
 -- okay to modify these to suit your needs!
-local numCols = 3
 local choiceWidth = 172
 local choiceHeight = 60
 local choiceStroke = 4
@@ -23,6 +22,8 @@ local voiceover_choices = {
   { file="en",  label="English", doubleres=false, font=("%sFGCHANGES/fonts/Noto Sans 40px/_Noto Sans 40px.ini"):format(base_path)},
   { file="jp",  label="日本語",   doubleres=true,  font=("%sFGCHANGES/fonts/Noto Sans JP 20px/_Noto Sans JP 20px.ini"):format(base_path)},
 }
+
+local numCols = math.min(#voiceover_choices, 3)
 
 -- ------------------------------------------------------
 
@@ -120,7 +121,10 @@ for i,v in ipairs(voiceover_choices) do
 
     InitCommand=function(self)
       choices_refs[i] = self
-      self:x(_screen.cx + (((i-1) % numCols) - math.floor(numCols/2)) * (choiceWidth + choicePaddingX) + (numCols%2==0 and (choiceWidth/2) or 0))
+      self:x(
+        _screen.cx + (((i-1) % numCols) - math.floor(numCols/2)) * (choiceWidth + choicePaddingX) + (numCols%2==0 and (choiceWidth/2) or 0)
+      )
+
       self:y((math.floor((i-1) / numCols) * (choiceHeight+choicePaddingY)))
       if (i==1) then self:queuecommand("GainFocus") end
     end,

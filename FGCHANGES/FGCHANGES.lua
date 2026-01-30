@@ -17,7 +17,7 @@ local base_audio_duration = (60*3) + 20
 
 local audio_choices = {
    en = {
-      path = ("%sFGCHANGES/media/audio/en-A.my-heart-almost-stood-still.ogg"):format(base_path),
+      path = ("%sFGCHANGES/media/audio/en.my-heart-almost-stood-still.ogg"):format(base_path),
       length = ((60*3)+20)
    },
    jp = {
